@@ -1,18 +1,20 @@
 {
-  "name": "su-covid-daily",
+  "name": "su-covid-daily-cli",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc"
+    "build": "tsc",
+    "start": "tsc && node dist/index.js"
   },
   "author": "Sean Dodson",
   "license": "ISC",
   "dependencies": {
-    "puppeteer": "^5.2.1"
+    "dotenv": "^8.2.0",
+    "su-covid-daily": "file:../form-automation"
   },
   "devDependencies": {
-    "@types/puppeteer": "^3.0.1",
+    "@types/node": "^14.6.0",
     "typescript": "^4.0.2"
   }
 }
