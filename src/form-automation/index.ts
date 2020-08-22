@@ -35,6 +35,7 @@ export default async function submitForm(username: string, password: string, rec
 
 async function createDesktopBrowser() {
   return await puppeteer.launch({
+    args: ['--no-sandbox', '--disable-setuid-sandbox'],
     defaultViewport: {
       height: 500,
       width: 1400,
