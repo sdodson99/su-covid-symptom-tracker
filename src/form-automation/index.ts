@@ -8,24 +8,41 @@ const password = process.env.PASSWORD || '';
 const receiptPath = 'dist/receipt.png';
 
 (async (username: string, password: string, receiptPath: string) => {
-  const browser = await createDesktopBrowser();
-  const page = await createPatientPortalPage(browser);
+  try {
+    console.log('Running automated COVID student symptom tracker form submission.');
 
-  await inputUsername(page, username);
-  await inputPassword(page, password);
-  await executeLogin(page);
+    console.log('Opening patient portal...');
+    const browser = await createDesktopBrowser();
+    const page = await createPatientPortalPage(browser);
 
-  await goToCoronavirusForm(page);
+    console.log('Logging in...');
+    await inputUsername(page, username);
+    await inputPassword(page, password);
+    await executeLogin(page);
+    console.log('Login successful.');
 
-  await inputNotOnCampus(page);
-  await inputNoCoronavirusContact(page);
-  await inputNoCoronavirusSymptoms(page);
+    console.log('Navigating to COVID form...');
+    await goToCoronavirusForm(page);
 
-  await executeSubmit(page);
+    console.log('Filling out form...');
+    await inputNotOnCampus(page);
+    await inputNoCoronavirusContact(page);
+    await inputNoCoronavirusSymptoms(page);
 
-  await page.screenshot({ path: receiptPath });
+    console.log('Submitting form...');
+    await executeSubmit(page);
+    console.log('Form submission successful.');
 
-  await browser.close();
+    console.log('Screenshotting receipt...');
+    await page.screenshot({ path: receiptPath });
+
+    console.log(`All done! View your receipt at '${receiptPath}'.`);
+
+    await browser.close();
+  } catch (error) {
+    console.error(error.message);
+    console.log(error);
+  }
 })(username, password, receiptPath);
 
 async function createDesktopBrowser() {
