@@ -4,8 +4,6 @@ Automatically report your daily COVID symptom form to the Wellness Center. This 
 applicable for **commuters** with **no recent contact with COVID** and **no COVID symptoms**. More configuration
 coming soon.
 
-**Please be honest with your daily symptom report.**
-
 ## Tutorial
 
 1. Clone the repository locally.
@@ -26,7 +24,8 @@ cd su-covid-symptom-tracker/src/form-automation
 npm i
 ```
 
-4. Create a file named '.env' with the following configuration.
+4. Create a file named '.env' with the following configuration. **This information is ONLY used to login to
+   the Wellness Center portal.**
 
 ```
 USERNAME=[your Stevenson University username]
@@ -40,3 +39,8 @@ npm run start
 ```
 
 6. (Optional) Observe your receipt at 'dist/receipt.png'.
+
+## Disclaimer
+
+- Use this script at your own risk. **It is strongly recommended to view your receipt to ensure the form was accurately submitted**
+- Please be honest with your daily symptom report
