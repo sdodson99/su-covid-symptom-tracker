@@ -1,4 +1,4 @@
-import puppeteer from 'puppeteer';
+import { chromium, ChromiumBrowser, Page } from 'playwright-chromium';
 
 export default async function submitForm(username: string, password: string, receiptPath: string) {
   console.log('Running automated COVID student symptom tracker form submission.');
@@ -34,16 +34,10 @@ export default async function submitForm(username: string, password: string, rec
 }
 
 async function createDesktopBrowser() {
-  return await puppeteer.launch({
-    args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    defaultViewport: {
-      height: 500,
-      width: 1400,
-    },
-  });
+  return await chromium.launch();
 }
 
-async function createPatientPortalPage(browser: puppeteer.Browser) {
+async function createPatientPortalPage(browser: ChromiumBrowser) {
   const page = await browser.newPage();
 
   const patientPortalUrl = 'https://stevenson.medicatconnect.com/';
@@ -52,7 +46,7 @@ async function createPatientPortalPage(browser: puppeteer.Browser) {
   return page;
 }
 
-async function inputUsername(page: puppeteer.Page, username: string) {
+async function inputUsername(page: Page, username: string) {
   const usernameInputSelector = '#ctl00_loginBar_txtUserName';
   const usernameInput = await page.$(usernameInputSelector);
 
@@ -63,7 +57,7 @@ async function inputUsername(page: puppeteer.Page, username: string) {
   await usernameInput.type(username);
 }
 
-async function inputPassword(page: puppeteer.Page, password: string) {
+async function inputPassword(page: Page, password: string) {
   const passwordInputSelector = '#ctl00_loginBar_txtPassword';
   const passwordInput = await page.$(passwordInputSelector);
 
@@ -74,7 +68,7 @@ async function inputPassword(page: puppeteer.Page, password: string) {
   await passwordInput.type(password);
 }
 
-async function executeLogin(page: puppeteer.Page) {
+async function executeLogin(page: Page) {
   const loginButtonSelector = '#ctl00_loginBar_lbtnLogin';
   const loginButton = await page.$(loginButtonSelector);
 
@@ -85,7 +79,7 @@ async function executeLogin(page: puppeteer.Page) {
   await Promise.all([loginButton.click(), page.waitForNavigation()]);
 }
 
-async function goToCoronavirusForm(page: puppeteer.Page) {
+async function goToCoronavirusForm(page: Page) {
   const covidNavLinkSelector = '#ctl00_navBar_liStatus a';
   const covidNavLink = await page.$(covidNavLinkSelector);
 
@@ -105,7 +99,7 @@ async function goToCoronavirusForm(page: puppeteer.Page) {
   await Promise.all([formStartLink.click(), page.waitForNavigation()]);
 }
 
-async function inputNotOnCampus(page: puppeteer.Page) {
+async function inputNotOnCampus(page: Page) {
   const notOnCampusInputSelector = '#ctl00_ContentPlaceHolder1_44954No';
   const notOnCampusInput = await page.$(notOnCampusInputSelector);
 
@@ -116,7 +110,7 @@ async function inputNotOnCampus(page: puppeteer.Page) {
   await notOnCampusInput.click();
 }
 
-async function inputNoCoronavirusContact(page: puppeteer.Page) {
+async function inputNoCoronavirusContact(page: Page) {
   const noCoronavirusContactInputSelector = '#ctl00_ContentPlaceHolder1_ComboBox44789-1';
   const noCoronavirusContactInput = await page.$(noCoronavirusContactInputSelector);
 
@@ -125,10 +119,10 @@ async function inputNoCoronavirusContact(page: puppeteer.Page) {
   }
 
   const noOptionValue = '23894';
-  await noCoronavirusContactInput.select(noOptionValue);
+  await noCoronavirusContactInput.selectOption(noOptionValue);
 }
 
-async function inputNoCoronavirusSymptoms(page: puppeteer.Page) {
+async function inputNoCoronavirusSymptoms(page: Page) {
   const noCoronavirusSymptomsInputSelector = '#ctl00_ContentPlaceHolder1_ComboBox4490622053';
   const noCoronavirusSymptomsInput = await page.$(noCoronavirusSymptomsInputSelector);
 
@@ -137,10 +131,10 @@ async function inputNoCoronavirusSymptoms(page: puppeteer.Page) {
   }
 
   const noOptionValue = '23896';
-  await noCoronavirusSymptomsInput.select(noOptionValue);
+  await noCoronavirusSymptomsInput.selectOption(noOptionValue);
 }
 
-async function executeSubmit(page: puppeteer.Page) {
+async function executeSubmit(page: Page) {
   const submitButtonSelector = '#ctl00_ContentPlaceHolder1_lbtnSubmit';
   const submitButton = await page.$(submitButtonSelector);
 
