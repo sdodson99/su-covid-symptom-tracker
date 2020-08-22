@@ -1,12 +1,17 @@
 # Stevenson University Automated COVID Student Symptom Tracker
 
-Automatically report your daily COVID symptom form to the Wellness Center. This automated script is only
-applicable for **commuters** with **no recent contact with COVID** and **no COVID symptoms**. More configuration
-coming soon.
+Automatically report your daily COVID symptom form to the Wellness Center. This automated script will submit the symptom tracker form
+with the following values:
+
+- Are you currently living on campus?: **No**
+- In the last two weeks did you care for or have close contact with someone diagnosed with COVID-19?: **No**
+- Do you have any of the following symptoms? (lists symptoms): **No**
+
+More configuration may be added upon request. **Please be honest with your daily symptom report.**
 
 ## Tutorial
 
-1. Clone the repository locally.
+1. Clone the [Git](https://git-scm.com/downloads) repository locally.
 
 ```
 git clone https://github.com/sdodson99/su-covid-symptom-tracker.git
@@ -18,7 +23,7 @@ git clone https://github.com/sdodson99/su-covid-symptom-tracker.git
 cd su-covid-symptom-tracker/src/form-automation
 ```
 
-3. Install packages.
+3. Install [Node](https://nodejs.org/en/download/) packages.
 
 ```
 npm i
@@ -42,5 +47,4 @@ npm run start
 
 ## Disclaimer
 
-- Use this script at your own risk. **It is strongly recommended to view your receipt to ensure the form was accurately submitted**
-- Please be honest with your daily symptom report
+Use this script at your own risk. **It is strongly recommended to view your receipt to ensure the form was accurately submitted.**
