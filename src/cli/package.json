@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "prestart": "cd ../form-automation && npm run build",
     "start": "tsc && node dist/index.js"
   },
   "author": "Sean Dodson",
