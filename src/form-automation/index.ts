@@ -34,9 +34,7 @@ export default async function submitForm(username: string, password: string, rec
 }
 
 async function createDesktopBrowser() {
-  return await chromium.connect({
-    wsEndpoint: 'wss://chrome.browserless.io/',
-  });
+  return await chromium.launch();
 }
 
 async function createPatientPortalPage(browser: ChromiumBrowser) {
