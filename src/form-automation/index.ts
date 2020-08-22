@@ -123,7 +123,7 @@ async function inputNoCoronavirusContact(page: Page) {
 }
 
 async function inputNoCoronavirusSymptoms(page: Page) {
-  const noCoronavirusSymptomsInputSelector = '#ctl00_ContentPlaceHolder1_ComboBox4490622053';
+  const noCoronavirusSymptomsInputSelector = '#ctl00_ContentPlaceHolder1_ComboBox4490622065';
   const noCoronavirusSymptomsInput = await page.$(noCoronavirusSymptomsInputSelector);
 
   if (!noCoronavirusSymptomsInput) {
