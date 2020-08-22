@@ -1,5 +1,5 @@
 import { AzureFunction, Context } from '@azure/functions';
-import submitForm from 'su-covid-daily/submit-form';
+import submitForm from 'su-covid-daily';
 
 const timerTrigger: AzureFunction = async function (context: Context, myTimer: any): Promise<void> {
   context.log('Starting daily form submission...', new Date().toISOString());
@@ -8,7 +8,7 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
   const password = process.env.PASSWORD;
   const receiptPath = 'dist/receipt.png';
 
-  submitForm(username, password, receiptPath);
+  await submitForm(username, password, receiptPath);
 
   context.log('Finished daily form submission.', new Date().toISOString());
 };

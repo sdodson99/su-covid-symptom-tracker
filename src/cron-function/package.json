@@ -5,7 +5,7 @@
     "build": "tsc",
     "build:production": "npm run prestart && npm prune --production",
     "watch": "tsc --w",
-    "prestart": "npm run build && func extensions install",
+    "prestart": "npm run build && func extensions install && cd ../form-automation && npm run build",
     "start:host": "func start",
     "start": "npm-run-all --parallel start:host watch",
     "test": "echo \"No tests yet...\""
@@ -13,6 +13,7 @@
   "description": "",
   "devDependencies": {
     "@azure/functions": "^1.0.1-beta1",
+    "@types/node": "^14.6.0",
     "npm-run-all": "^4.1.5",
     "typescript": "^3.3.3"
   },
