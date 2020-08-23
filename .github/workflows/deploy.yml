@@ -21,6 +21,9 @@ jobs:
         with:
           node-version: '12.x'
 
+      - name: 'Install Azure Function Core Tools'
+        run: 'npm i -g azure-functions-core-tools@3'
+
       - name: 'Install Form Automation packages'
         run: 'npm i'
         working-directory: ${{ env.FORM_AUTOMATION_PATH }}
@@ -33,13 +36,14 @@ jobs:
         run: 'npm i'
         working-directory: ${{ env.FUNCTION_PATH }}
 
+      - name: 'Build Cron Function'
+        run: 'npm run build:production'
+        working-directory: ${{ env.FUNCTION_PATH }}
+
       - name: 'Login to Azure CLI'
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
-
-      - name: 'Install Azure Function Core Tools'
-        run: 'npm i -g azure-functions-core-tools@3'
 
       - name: 'Deploy Azure Function'
         run: 'func azure functionapp publish ${{ env.AZURE_FUNCTIONAPP_NAME }} --typescript'
