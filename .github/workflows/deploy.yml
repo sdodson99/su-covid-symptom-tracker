@@ -5,6 +5,7 @@ on: [push]
 env:
   AZURE_FUNCTIONAPP_NAME: 'su-covid-daily-cron'
   AZURE_FUNCTIONAPP_PACKAGE_PATH: 'src/cron-function'
+  PLAYWRIGHT_BROWSERS_PATH: '0'
 
 jobs:
   build:
