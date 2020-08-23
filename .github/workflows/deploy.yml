@@ -1,6 +1,10 @@
-name: Deploy Timer
+name: Deploy CRON Timer
 
 on: [push]
+
+env:
+  AZURE_FUNCTIONAPP_NAME: 'su-covid-daily-cron'
+  AZURE_FUNCTIONAPP_PACKAGE_PATH: 'src/cron-function'
 
 jobs:
   build:
@@ -17,3 +21,15 @@ jobs:
 
       - name: 'Install packages'
         run: 'cd src/cron-function && npm i'
+
+      - name: 'Login to Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
+
+      - name: 'Deploy Azure Function'
+        uses: Azure/functions-action@v1
+        id: fa
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
