@@ -1,10 +1,10 @@
-name: Deploy CRON Timer
+name: Deploy
 
 on: [push]
 
 env:
   AZURE_FUNCTIONAPP_NAME: 'su-covid-daily-cron'
-  FUNCTION_PATH: 'src/cron-function'
+  CRON_FUNCTION_PATH: 'src/cron-function'
   FORM_AUTOMATION_PATH: 'src/form-automation'
   PLAYWRIGHT_BROWSERS_PATH: '0'
 
@@ -21,6 +21,11 @@ jobs:
         with:
           node-version: '12.x'
 
+      - name: 'Login to Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
+
       - name: 'Install Azure Function Core Tools'
         run: 'npm i -g azure-functions-core-tools@3'
 
@@ -32,19 +37,18 @@ jobs:
         run: 'npm run build'
         working-directory: ${{ env.FORM_AUTOMATION_PATH }}
 
-      - name: 'Install Cron Function packages'
+      - name: 'Install CRON Function packages'
         run: 'npm i'
-        working-directory: ${{ env.FUNCTION_PATH }}
+        working-directory: ${{ env.CRON_FUNCTION_PATH }}
 
-      - name: 'Build Cron Function'
+      - name: 'Build CRON Function'
         run: 'npm run build:production'
-        working-directory: ${{ env.FUNCTION_PATH }}
+        working-directory: ${{ env.CRON_FUNCTION_PATH }}
 
-      - name: 'Login to Azure CLI'
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
+      - name: 'Run CRON Function'
+        run: 'npm run start'
+        working-directory: ${{ env.CRON_FUNCTION_PATH }}
 
       - name: 'Deploy Azure Function'
         run: 'func azure functionapp publish ${{ env.AZURE_FUNCTIONAPP_NAME }} --typescript'
-        working-directory: ${{ env.FUNCTION_PATH }}
+        working-directory: ${{ env.CRON_FUNCTION_PATH }}
