@@ -33,5 +33,5 @@ jobs:
         run: 'npm i -g azure-functions-core-tools@3'
 
       - name: 'Deploy Azure Function'
-        run: 'func azure functionapp publish ${{ env.AZURE_FUNCTIONAPP_NAME }}'
+        run: 'func azure functionapp publish ${{ env.AZURE_FUNCTIONAPP_NAME }} --typescript'
         working-directory: ${{ env.FUNCTION_PATH }}
