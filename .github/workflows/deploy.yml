@@ -1,0 +1,19 @@
+name: Deploy Timer
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@master
+
+      - name: 'Setup Node'
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: 'Install packages'
+        run: 'cd src/form-automation && npm i'
