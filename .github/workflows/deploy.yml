@@ -28,9 +28,8 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
 
+      - name: 'Install Azure Function Core Tools'
+        run: 'npm i -g azure-functions-core-tools@3'
+
       - name: 'Deploy Azure Function'
-        uses: Azure/functions-action@v1
-        id: fa
-        with:
-          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
-          package: ${{ env.AZURE_FUNCTIONAPP_PACKAGE_PATH }}
+        run: 'cd src/cron-function && func azure functionapp publish ${{ env.AZURE_FUNCTIONAPP_NAME }}'
