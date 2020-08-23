@@ -5,6 +5,7 @@ on: [push]
 env:
   AZURE_FUNCTIONAPP_NAME: 'su-covid-daily-cron'
   FUNCTION_PATH: 'src/cron-function'
+  FORM_AUTOMATION_PATH: 'src/form-automation'
   PLAYWRIGHT_BROWSERS_PATH: '0'
 
 jobs:
@@ -20,7 +21,15 @@ jobs:
         with:
           node-version: '12.x'
 
-      - name: 'Install packages'
+      - name: 'Install Form Automation packages'
+        run: 'npm i'
+        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
+
+      - name: 'Build Form Automation'
+        run: 'npm run build'
+        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
+
+      - name: 'Install Cron Function packages'
         run: 'npm i'
         working-directory: ${{ env.FUNCTION_PATH }}
 
