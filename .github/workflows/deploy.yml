@@ -29,8 +29,3 @@ jobs:
           path: ${{ env.DOCKER_BUILD_CONTEXT }}
           dockerfile: ${{ env.DOCKERFILE_PATH }}
           tags: latest
-
-      - name: 'Login to Azure CLI'
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
