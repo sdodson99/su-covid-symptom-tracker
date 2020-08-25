@@ -111,8 +111,20 @@ async function inputNotOnCampus(page: Page) {
 }
 
 async function inputNoCoronavirusContact(page: Page) {
-  const noCoronavirusContactInputSelector = '#ctl00_ContentPlaceHolder1_ComboBox44789-1';
-  const noCoronavirusContactInput = await page.$(noCoronavirusContactInputSelector);
+  const coronavirusContactQuestionSelector = "xpath=//span[contains(text(), '1.')]";
+  const coronavirusContactQuestion = await page.$(coronavirusContactQuestionSelector);
+
+  if (!coronavirusContactQuestion) {
+    throw new Error('No coronavirus contact question not found.');
+  }
+
+  const coronavirusContactQuestionParent = await coronavirusContactQuestion.$('..');
+  if (!coronavirusContactQuestionParent) {
+    throw new Error('No coronavirus contact question parent not found.');
+  }
+
+  const noCoronavirusContactInputSelector = 'select';
+  const noCoronavirusContactInput = await coronavirusContactQuestionParent.$(noCoronavirusContactInputSelector);
 
   if (!noCoronavirusContactInput) {
     throw new Error('No coronavirus contact input not found.');
@@ -123,8 +135,20 @@ async function inputNoCoronavirusContact(page: Page) {
 }
 
 async function inputNoCoronavirusSymptoms(page: Page) {
-  const noCoronavirusSymptomsInputSelector = '#ctl00_ContentPlaceHolder1_ComboBox4490622065';
-  const noCoronavirusSymptomsInput = await page.$(noCoronavirusSymptomsInputSelector);
+  const coronavirusSymptomsQuestionSelector = "xpath=//span[contains(text(), '2.')]";
+  const coronavirusSymptomsQuestion = await page.$(coronavirusSymptomsQuestionSelector);
+
+  if (!coronavirusSymptomsQuestion) {
+    throw new Error('No coronavirus symptoms question not found.');
+  }
+
+  const coronavirusSymptomsQuestionParent = await coronavirusSymptomsQuestion.$('..');
+  if (!coronavirusSymptomsQuestionParent) {
+    throw new Error('No coronavirus symptoms question parent not found.');
+  }
+
+  const noCoronavirusSymptomsInputSelector = 'select';
+  const noCoronavirusSymptomsInput = await coronavirusSymptomsQuestionParent.$(noCoronavirusSymptomsInputSelector);
 
   if (!noCoronavirusSymptomsInput) {
     throw new Error('No coronavirus symptoms input not found.');
@@ -142,6 +166,5 @@ async function executeSubmit(page: Page) {
     throw new Error('Submit button not found.');
   }
 
-  submitButton.focus();
-  // await Promise.all([submitButton.click(), page.waitForNavigation()]);
+  await Promise.all([submitButton.click(), page.waitForNavigation()]);
 }
