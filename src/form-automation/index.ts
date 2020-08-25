@@ -166,5 +166,5 @@ async function executeSubmit(page: Page) {
     throw new Error('Submit button not found.');
   }
 
-  await Promise.all([submitButton.click(), page.waitForNavigation()]);
+  // await Promise.all([submitButton.click(), page.waitForNavigation()]);
 }

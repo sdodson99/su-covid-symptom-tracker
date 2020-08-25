@@ -3,10 +3,9 @@ name: Deploy
 on: [push]
 
 env:
-  AZURE_FUNCTIONAPP_NAME: 'su-covid-daily-cron'
-  CRON_FUNCTION_PATH: 'src/cron-function'
-  FORM_AUTOMATION_PATH: 'src/form-automation'
-  PLAYWRIGHT_BROWSERS_PATH: '0'
+  DOCKER_REPOSITORY: 'sdodson/su-covid-cron-function'
+  DOCKER_BUILD_CONTEXT: 'src'
+  DOCKERFILE_PATH: 'src/cron-function/Dockerfile'
 
 jobs:
   build:
@@ -21,34 +20,17 @@ jobs:
         with:
           node-version: '12.x'
 
+      - name: 'Deploy Docker Image'
+        uses: docker/build-push-action@v1
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+          repository: ${{ env.DOCKER_REPOSITORY }}
+          path: ${{ env.DOCKER_BUILD_CONTEXT }}
+          dockerfile: ${{ env.DOCKERFILE_PATH }}
+          tags: latest
+
       - name: 'Login to Azure CLI'
         uses: azure/login@v1
         with:
           creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
-
-      - name: 'Install Azure Function Core Tools'
-        run: 'npm i -g azure-functions-core-tools@3'
-
-      - name: 'Install Form Automation packages'
-        run: 'npm i'
-        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
-
-      - name: 'Build Form Automation'
-        run: 'npm run build'
-        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
-
-      - name: 'Install CRON Function packages'
-        run: 'npm i'
-        working-directory: ${{ env.CRON_FUNCTION_PATH }}
-
-      - name: 'Build CRON Function'
-        run: 'npm run build:production'
-        working-directory: ${{ env.CRON_FUNCTION_PATH }}
-
-      - name: 'Run CRON Function'
-        run: 'npm run start'
-        working-directory: ${{ env.CRON_FUNCTION_PATH }}
-
-      - name: 'Deploy Azure Function'
-        run: 'func azure functionapp publish ${{ env.AZURE_FUNCTIONAPP_NAME }} --typescript'
-        working-directory: ${{ env.CRON_FUNCTION_PATH }}
