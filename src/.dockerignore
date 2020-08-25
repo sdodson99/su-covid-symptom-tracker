@@ -1,6 +1,7 @@
 local.settings.json
-node_modules/
-storage/
-.vscode/
-cli/
-dist/
+**node_modules/
+**storage/
+**.vscode/
+**cli/
+**dist/
+.env
