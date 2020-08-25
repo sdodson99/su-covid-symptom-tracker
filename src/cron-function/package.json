@@ -2,10 +2,10 @@
   "name": "su-covid-daily-cron",
   "version": "",
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cd ../form-automation && npm run build",
     "build:production": "npm run prestart && npm prune --production",
     "watch": "tsc --w",
-    "prestart": "npm run build && func extensions install && cd ../form-automation && npm run build",
+    "prestart": "npm run build && func extensions install",
     "start:host": "func start",
     "start": "npm-run-all --parallel start:host watch",
     "test": "echo \"No tests yet...\""
