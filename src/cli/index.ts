@@ -9,7 +9,7 @@ import dotenv from 'dotenv';
   const receiptPath = 'dist/receipt.png';
 
   try {
-    await submitForm(username, password, receiptPath);
+    await submitForm(username, password, receiptPath, console);
   } catch (error) {
     console.log(error);
   }

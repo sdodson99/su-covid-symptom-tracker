@@ -10,7 +10,7 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
   const password = process.env.SU_PASSWORD;
   const receiptPath = path.join(os.homedir(), 'receipt.png');
 
-  await submitForm(username, password, receiptPath);
+  await submitForm(username, password, receiptPath, context);
 
   context.log('Finished daily form submission.', new Date().toISOString());
 };

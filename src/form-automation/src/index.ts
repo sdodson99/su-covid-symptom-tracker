@@ -1,34 +1,35 @@
 import { chromium, ChromiumBrowser, Page, Response } from 'playwright-chromium';
+import ILogger from './loggers/logger';
 
-export default async function submitForm(username: string, password: string, receiptPath: string) {
-  console.log('Running automated COVID student symptom tracker form submission.');
+export default async function submitForm(username: string, password: string, receiptPath: string, logger: ILogger) {
+  logger.log('Running automated COVID student symptom tracker form submission.');
 
-  console.log('Opening patient portal...');
+  logger.log('Opening patient portal...');
   const browser = await createDesktopBrowser();
   const page = await createPatientPortalPage(browser);
 
-  console.log('Logging in...');
+  logger.log('Logging in...');
   await inputUsername(page, username);
   await inputPassword(page, password);
   await executeLogin(page);
-  console.log('Login successful.');
+  logger.log('Login successful.');
 
-  console.log('Navigating to COVID form...');
+  logger.log('Navigating to COVID form...');
   await goToCoronavirusForm(page);
 
-  console.log('Filling out form...');
+  logger.log('Filling out form...');
   await inputNotOnCampus(page);
   await inputNoCoronavirusContact(page);
   await inputNoCoronavirusSymptoms(page);
 
-  console.log('Submitting form...');
+  logger.log('Submitting form...');
   await executeSubmit(page);
-  console.log('Form submission successful.');
+  logger.log('Form submission successful.');
 
-  console.log('Screenshotting receipt...');
+  logger.log('Screenshotting receipt...');
   await page.screenshot({ path: receiptPath });
 
-  console.log(`All done! View your receipt at '${receiptPath}'.`);
+  logger.log(`All done! View your receipt at '${receiptPath}'.`);
 
   await browser.close();
 }
