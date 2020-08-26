@@ -8,10 +8,8 @@ ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
 
 COPY . /home/site/wwwroot
 
-RUN cd /home/site/wwwroot/form-automation && \
-    npm install
-
 RUN cd /home/site/wwwroot/cron-function && \
+    npm run preinstall:local && \
     npm install && \
     npm run build
 
