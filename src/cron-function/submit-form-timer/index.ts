@@ -6,7 +6,7 @@ const timerTrigger: AzureFunction = async function (context: Context, myTimer: a
 
   const username = process.env.SU_USERNAME;
   const password = process.env.SU_PASSWORD;
-  const receiptPath = 'dist/receipt.png';
+  const receiptPath = 'receipt.png';
 
   await submitForm(username, password, receiptPath);
 
