@@ -1,0 +1,21 @@
+{
+  "name": "su-covid-daily-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "prestart": "cd ../form-automation && npm run build",
+    "start": "tsc && node dist/index.js"
+  },
+  "author": "Sean Dodson",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "su-covid-daily": "file:../form-automation"
+  },
+  "devDependencies": {
+    "@types/node": "^14.6.0",
+    "typescript": "^4.0.2"
+  }
+}

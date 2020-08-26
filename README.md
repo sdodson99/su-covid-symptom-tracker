@@ -20,7 +20,7 @@ git clone https://github.com/sdodson99/su-covid-symptom-tracker.git
 2. Open the project directory.
 
 ```
-cd su-covid-symptom-tracker/src/form-automation
+cd su-covid-symptom-tracker/src/cli
 ```
 
 3. Install [Node](https://nodejs.org/en/download/) packages.

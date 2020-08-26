@@ -1,60 +1,43 @@
-import puppeteer from 'puppeteer';
-import dotenv from 'dotenv';
+import { chromium, ChromiumBrowser, Page } from 'playwright-chromium';
 
-dotenv.config();
+export default async function submitForm(username: string, password: string, receiptPath: string) {
+  console.log('Running automated COVID student symptom tracker form submission.');
 
-const username = process.env.USERNAME || '';
-const password = process.env.PASSWORD || '';
-const receiptPath = 'dist/receipt.png';
+  console.log('Opening patient portal...');
+  const browser = await createDesktopBrowser();
+  const page = await createPatientPortalPage(browser);
 
-(async (username: string, password: string, receiptPath: string) => {
-  try {
-    console.log('Running automated COVID student symptom tracker form submission.');
+  console.log('Logging in...');
+  await inputUsername(page, username);
+  await inputPassword(page, password);
+  await executeLogin(page);
+  console.log('Login successful.');
 
-    console.log('Opening patient portal...');
-    const browser = await createDesktopBrowser();
-    const page = await createPatientPortalPage(browser);
+  console.log('Navigating to COVID form...');
+  await goToCoronavirusForm(page);
 
-    console.log('Logging in...');
-    await inputUsername(page, username);
-    await inputPassword(page, password);
-    await executeLogin(page);
-    console.log('Login successful.');
+  console.log('Filling out form...');
+  await inputNotOnCampus(page);
+  await inputNoCoronavirusContact(page);
+  await inputNoCoronavirusSymptoms(page);
 
-    console.log('Navigating to COVID form...');
-    await goToCoronavirusForm(page);
+  console.log('Submitting form...');
+  await executeSubmit(page);
+  console.log('Form submission successful.');
 
-    console.log('Filling out form...');
-    await inputNotOnCampus(page);
-    await inputNoCoronavirusContact(page);
-    await inputNoCoronavirusSymptoms(page);
+  console.log('Screenshotting receipt...');
+  await page.screenshot({ path: receiptPath });
 
-    console.log('Submitting form...');
-    await executeSubmit(page);
-    console.log('Form submission successful.');
+  console.log(`All done! View your receipt at '${receiptPath}'.`);
 
-    console.log('Screenshotting receipt...');
-    await page.screenshot({ path: receiptPath });
-
-    console.log(`All done! View your receipt at '${receiptPath}'.`);
-
-    await browser.close();
-  } catch (error) {
-    console.error(error.message);
-    console.log(error);
-  }
-})(username, password, receiptPath);
-
-async function createDesktopBrowser() {
-  return await puppeteer.launch({
-    defaultViewport: {
-      height: 500,
-      width: 1400,
-    },
-  });
+  await browser.close();
 }
 
-async function createPatientPortalPage(browser: puppeteer.Browser) {
+async function createDesktopBrowser() {
+  return await chromium.launch();
+}
+
+async function createPatientPortalPage(browser: ChromiumBrowser) {
   const page = await browser.newPage();
 
   const patientPortalUrl = 'https://stevenson.medicatconnect.com/';
@@ -63,7 +46,7 @@ async function createPatientPortalPage(browser: puppeteer.Browser) {
   return page;
 }
 
-async function inputUsername(page: puppeteer.Page, username: string) {
+async function inputUsername(page: Page, username: string) {
   const usernameInputSelector = '#ctl00_loginBar_txtUserName';
   const usernameInput = await page.$(usernameInputSelector);
 
@@ -74,7 +57,7 @@ async function inputUsername(page: puppeteer.Page, username: string) {
   await usernameInput.type(username);
 }
 
-async function inputPassword(page: puppeteer.Page, password: string) {
+async function inputPassword(page: Page, password: string) {
   const passwordInputSelector = '#ctl00_loginBar_txtPassword';
   const passwordInput = await page.$(passwordInputSelector);
 
@@ -85,7 +68,7 @@ async function inputPassword(page: puppeteer.Page, password: string) {
   await passwordInput.type(password);
 }
 
-async function executeLogin(page: puppeteer.Page) {
+async function executeLogin(page: Page) {
   const loginButtonSelector = '#ctl00_loginBar_lbtnLogin';
   const loginButton = await page.$(loginButtonSelector);
 
@@ -96,7 +79,7 @@ async function executeLogin(page: puppeteer.Page) {
   await Promise.all([loginButton.click(), page.waitForNavigation()]);
 }
 
-async function goToCoronavirusForm(page: puppeteer.Page) {
+async function goToCoronavirusForm(page: Page) {
   const covidNavLinkSelector = '#ctl00_navBar_liStatus a';
   const covidNavLink = await page.$(covidNavLinkSelector);
 
@@ -116,7 +99,7 @@ async function goToCoronavirusForm(page: puppeteer.Page) {
   await Promise.all([formStartLink.click(), page.waitForNavigation()]);
 }
 
-async function inputNotOnCampus(page: puppeteer.Page) {
+async function inputNotOnCampus(page: Page) {
   const notOnCampusInputSelector = '#ctl00_ContentPlaceHolder1_44954No';
   const notOnCampusInput = await page.$(notOnCampusInputSelector);
 
@@ -127,31 +110,55 @@ async function inputNotOnCampus(page: puppeteer.Page) {
   await notOnCampusInput.click();
 }
 
-async function inputNoCoronavirusContact(page: puppeteer.Page) {
-  const noCoronavirusContactInputSelector = '#ctl00_ContentPlaceHolder1_ComboBox44789-1';
-  const noCoronavirusContactInput = await page.$(noCoronavirusContactInputSelector);
+async function inputNoCoronavirusContact(page: Page) {
+  const coronavirusContactQuestionSelector = "xpath=//span[contains(text(), '1.')]";
+  const coronavirusContactQuestion = await page.$(coronavirusContactQuestionSelector);
+
+  if (!coronavirusContactQuestion) {
+    throw new Error('No coronavirus contact question not found.');
+  }
+
+  const coronavirusContactQuestionParent = await coronavirusContactQuestion.$('..');
+  if (!coronavirusContactQuestionParent) {
+    throw new Error('No coronavirus contact question parent not found.');
+  }
+
+  const noCoronavirusContactInputSelector = 'select';
+  const noCoronavirusContactInput = await coronavirusContactQuestionParent.$(noCoronavirusContactInputSelector);
 
   if (!noCoronavirusContactInput) {
     throw new Error('No coronavirus contact input not found.');
   }
 
   const noOptionValue = '23894';
-  await noCoronavirusContactInput.select(noOptionValue);
+  await noCoronavirusContactInput.selectOption(noOptionValue);
 }
 
-async function inputNoCoronavirusSymptoms(page: puppeteer.Page) {
-  const noCoronavirusSymptomsInputSelector = '#ctl00_ContentPlaceHolder1_ComboBox4490622053';
-  const noCoronavirusSymptomsInput = await page.$(noCoronavirusSymptomsInputSelector);
+async function inputNoCoronavirusSymptoms(page: Page) {
+  const coronavirusSymptomsQuestionSelector = "xpath=//span[contains(text(), '2.')]";
+  const coronavirusSymptomsQuestion = await page.$(coronavirusSymptomsQuestionSelector);
+
+  if (!coronavirusSymptomsQuestion) {
+    throw new Error('No coronavirus symptoms question not found.');
+  }
+
+  const coronavirusSymptomsQuestionParent = await coronavirusSymptomsQuestion.$('..');
+  if (!coronavirusSymptomsQuestionParent) {
+    throw new Error('No coronavirus symptoms question parent not found.');
+  }
+
+  const noCoronavirusSymptomsInputSelector = 'select';
+  const noCoronavirusSymptomsInput = await coronavirusSymptomsQuestionParent.$(noCoronavirusSymptomsInputSelector);
 
   if (!noCoronavirusSymptomsInput) {
     throw new Error('No coronavirus symptoms input not found.');
   }
 
   const noOptionValue = '23896';
-  await noCoronavirusSymptomsInput.select(noOptionValue);
+  await noCoronavirusSymptomsInput.selectOption(noOptionValue);
 }
 
-async function executeSubmit(page: puppeteer.Page) {
+async function executeSubmit(page: Page) {
   const submitButtonSelector = '#ctl00_ContentPlaceHolder1_lbtnSubmit';
   const submitButton = await page.$(submitButtonSelector);
 
