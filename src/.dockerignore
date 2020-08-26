@@ -3,5 +3,4 @@ local.settings.json
 **storage/
 **.vscode/
 **cli/
-**dist/
 .env
