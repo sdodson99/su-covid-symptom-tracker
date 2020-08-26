@@ -5,7 +5,7 @@
       "type": "timerTrigger",
       "direction": "in",
       "schedule": "0 0 8 * * *",
-      "runOnStartup": true
+      "runOnStartup": false
     }
   ],
   "scriptFile": "../dist/submit-form-timer/index.js"

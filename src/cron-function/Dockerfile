@@ -1,6 +1,6 @@
-# To enable ssh & remote debugging on app service change the base image to the one below
-# FROM mcr.microsoft.com/azure-functions/node:3.0-appservice
-FROM mcr.microsoft.com/azure-functions/node:3.0
+# Use the first image to enable ssh & remote debugging
+FROM mcr.microsoft.com/azure-functions/node:3.0-appservice
+# FROM mcr.microsoft.com/azure-functions/node:3.0
 
 ENV AzureWebJobsScriptRoot=/home/site/wwwroot \
     AzureFunctionsJobHost__Logging__Console__IsEnabled=true \
@@ -15,5 +15,6 @@ RUN cd /home/site/wwwroot/cron-function && \
     npm install && \
     npm run build
 
+# TODO: Copy to correct location initially.
 RUN cp -r /home/site/wwwroot/cron-function/* /home/site/wwwroot/
 RUN cp -r /home/site/wwwroot/form-automation /home/site
