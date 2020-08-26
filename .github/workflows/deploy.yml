@@ -6,6 +6,8 @@ on:
       - master
 
 env:
+  AZURE_FUNCTIONAPP_PATH: 'src/cron-function'
+  AZURE_FUNCTIONAPP_NAME: 'su-covid-daily-cron'
   DOCKER_REPOSITORY: 'sdodson/su-covid-cron-function'
   DOCKER_BUILD_CONTEXT: 'src'
   DOCKERFILE_PATH: 'src/cron-function/Dockerfile'
@@ -17,6 +19,27 @@ jobs:
     steps:
       - name: 'Checkout'
         uses: actions/checkout@master
+
+      - name: 'Setup Node'
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: 'Login to Azure CLI'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
+
+      - name: 'Install Azure Function Core Tools'
+        run: 'npm i -g azure-functions-core-tools@3'
+
+      - name: 'Install CRON function local packages'
+        run: 'npm run preinstall:local'
+        working-directory: ${{ env.AZURE_FUNCTIONAPP_PATH }}
+
+      - name: 'Deploy to Azure Functions'
+        run: 'func azure functionapp publish ${{ env.AZURE_FUNCTIONAPP_NAME }} --build remote --typescript'
+        working-directory: ${{ env.AZURE_FUNCTIONAPP_PATH }}
 
       - name: 'Deploy Docker Image'
         uses: docker/build-push-action@v1
