@@ -2,12 +2,15 @@
   "name": "su-covid-daily-cron",
   "version": "",
   "scripts": {
-    "build": "tsc && cd ../form-automation && npm run build",
+    "build": "tsc",
     "build:production": "npm run prestart && npm prune --production",
     "watch": "tsc --w",
     "prestart": "npm run build && func extensions install",
     "start:host": "func start",
     "start": "npm-run-all --parallel start:host watch",
+    "preinstall:local": "mkdir -p packages && cd ../form-automation && npm i && npm run build && cd ../cron-function && npm pack ../form-automation && mv su-covid-daily-* packages/ && npm i ./packages/*",
+    "predev": "npm run preinstall:local",
+    "dev": "npm run start",
     "test": "echo \"No tests yet...\""
   },
   "description": "",
@@ -18,6 +21,6 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
-    "su-covid-daily": "file:../form-automation"
+    "su-covid-daily": "file:packages/su-covid-daily-1.0.0.tgz"
   }
 }

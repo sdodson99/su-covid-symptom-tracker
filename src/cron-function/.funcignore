@@ -4,3 +4,5 @@
 .vscode
 local.settings.json
 test
+Dockerfile
+node_modules
