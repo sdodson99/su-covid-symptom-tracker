@@ -1,4 +1,4 @@
-import { chromium, ChromiumBrowser, Page } from 'playwright-chromium';
+import { chromium, ChromiumBrowser, Page, Response } from 'playwright-chromium';
 
 export default async function submitForm(username: string, password: string, receiptPath: string) {
   console.log('Running automated COVID student symptom tracker form submission.');
@@ -76,7 +76,7 @@ async function executeLogin(page: Page) {
     throw new Error('Login button not found.');
   }
 
-  await Promise.all([loginButton.click(), page.waitForNavigation()]);
+  await Promise.all([loginButton.click(), waitForNavigationWithTimeout(page)]);
 }
 
 async function goToCoronavirusForm(page: Page) {
@@ -87,7 +87,7 @@ async function goToCoronavirusForm(page: Page) {
     throw new Error('Coronavirus navigation link not found.');
   }
 
-  await Promise.all([covidNavLink.click(), page.waitForNavigation()]);
+  await Promise.all([covidNavLink.click(), waitForNavigationWithTimeout(page)]);
 
   const formStartLinkSelector = '#ctl00_ContentPlaceHolder1_lblStatusForm a';
   const formStartLink = await page.$(formStartLinkSelector);
@@ -96,7 +96,7 @@ async function goToCoronavirusForm(page: Page) {
     throw new Error('Coronavirus form start link not found.');
   }
 
-  await Promise.all([formStartLink.click(), page.waitForNavigation()]);
+  await Promise.all([formStartLink.click(), waitForNavigationWithTimeout(page)]);
 }
 
 async function inputNotOnCampus(page: Page) {
@@ -166,5 +166,12 @@ async function executeSubmit(page: Page) {
     throw new Error('Submit button not found.');
   }
 
-  await Promise.all([submitButton.click(), page.waitForNavigation()]);
+  await Promise.all([submitButton.click(), waitForNavigationWithTimeout(page)]);
+}
+
+async function waitForNavigationWithTimeout(page: Page): Promise<Response | null> {
+  const timeoutMinutes = 5;
+  const timeoutMilliseconds = timeoutMinutes * 60 * 1000;
+
+  return page.waitForNavigation({ timeout: timeoutMilliseconds });
 }

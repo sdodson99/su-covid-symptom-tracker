@@ -15,6 +15,5 @@ RUN cd /home/site/wwwroot/cron-function && \
     npm install && \
     npm run build
 
-# TODO: Copy to correct location initially.
 RUN cp -r /home/site/wwwroot/cron-function/* /home/site/wwwroot/
 RUN cp -r /home/site/wwwroot/form-automation /home/site
