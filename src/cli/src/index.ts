@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 import submitForm from 'su-covid-daily';
 import dotenv from 'dotenv';
 
