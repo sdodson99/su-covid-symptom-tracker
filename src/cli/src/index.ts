@@ -1,11 +1,8 @@
 #!/usr/bin/env node
 
 import submitForm from 'su-covid-daily';
-import dotenv from 'dotenv';
 
 (async () => {
-  dotenv.config();
-
   const username = process.env.USERNAME || '';
   const password = process.env.PASSWORD || '';
   const receiptPath = 'dist/receipt.png';

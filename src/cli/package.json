@@ -20,7 +20,6 @@
   "author": "Sean Dodson",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^8.2.0",
     "su-covid-daily": "file:../form-automation"
   },
   "devDependencies": {
