@@ -5,6 +5,7 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
+    "preinstall:local": "mkdir -p packages && cd ../form-automation && npm i && npm run build && cd ../cli && npm pack ../form-automation && mv su-covid-daily-* packages/ && npm i ./packages/*",
     "prepare": "npm run build",
     "build": "tsc && cd ../form-automation && npm run build",
     "prestart": "npm run build",
@@ -15,7 +16,8 @@
   },
   "preferGlobal": true,
   "files": [
-    "dist/**/*"
+    "dist/**/*",
+    "packages/**/*"
   ],
   "author": "Sean Dodson",
   "license": "ISC",
@@ -23,7 +25,7 @@
     "commander": "^6.0.0",
     "inquirer": "^7.3.3",
     "keytar": "^6.0.1",
-    "su-covid-daily": "file:../form-automation"
+    "su-covid-daily": "file:packages/su-covid-daily-1.0.0.tgz"
   },
   "devDependencies": {
     "@types/inquirer": "^7.3.1",
