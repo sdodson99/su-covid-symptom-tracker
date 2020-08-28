@@ -83,8 +83,6 @@ async function executeLogin(page: Page) {
 
   await Promise.all([loginButton.click(), waitForNavigationWithTimeout(page)]);
 
-  console.log(page.url());
-
   const stillOnLoginPage = page.url().includes('login');
   if (stillOnLoginPage) {
     throw new Error('Login failed.');
