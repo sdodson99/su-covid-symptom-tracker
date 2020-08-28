@@ -1,6 +1,6 @@
 {
   "name": "su-covid-daily-cli",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Automatically report your daily COVID symptom form to the Wellness Center.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -20,6 +20,7 @@
   "author": "Sean Dodson",
   "license": "ISC",
   "dependencies": {
+    "commander": "^6.0.0",
     "su-covid-daily": "file:../form-automation"
   },
   "devDependencies": {
