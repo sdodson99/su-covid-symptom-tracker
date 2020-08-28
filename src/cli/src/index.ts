@@ -27,7 +27,11 @@ const submitCommand = program
       console.log(submitCommand.helpInformation());
       console.error('Error: Please provide a password. See usage information above.\n');
     } else {
-      await submitForm(username, password, receiptPath, console);
+      try {
+        await submitForm(username, password, receiptPath, console);
+      } catch (error) {
+        console.error(error);
+      }
     }
   });
 

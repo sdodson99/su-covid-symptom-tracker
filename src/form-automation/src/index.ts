@@ -5,33 +5,37 @@ export default async function submitForm(username: string, password: string, rec
   logger.log('Running automated COVID student symptom tracker form submission.');
 
   logger.log('Opening patient portal...');
+
   const browser = await createDesktopBrowser();
-  const page = await createPatientPortalPage(browser);
 
-  logger.log('Logging in...');
-  await inputUsername(page, username);
-  await inputPassword(page, password);
-  await executeLogin(page);
-  logger.log('Login successful.');
+  try {
+    const page = await createPatientPortalPage(browser);
 
-  logger.log('Navigating to COVID form...');
-  await goToCoronavirusForm(page);
+    logger.log('Logging in...');
+    await inputUsername(page, username);
+    await inputPassword(page, password);
+    await executeLogin(page);
+    logger.log('Login successful.');
 
-  logger.log('Filling out form...');
-  await inputNotOnCampus(page);
-  await inputNoCoronavirusContact(page);
-  await inputNoCoronavirusSymptoms(page);
+    logger.log('Navigating to COVID form...');
+    await goToCoronavirusForm(page);
 
-  logger.log('Submitting form...');
-  await executeSubmit(page);
-  logger.log('Form submission successful.');
+    logger.log('Filling out form...');
+    await inputNotOnCampus(page);
+    await inputNoCoronavirusContact(page);
+    await inputNoCoronavirusSymptoms(page);
 
-  logger.log('Screenshotting receipt...');
-  await page.screenshot({ path: receiptPath });
+    logger.log('Submitting form...');
+    await executeSubmit(page);
+    logger.log('Form submission successful.');
 
-  logger.log(`All done! View your receipt at '${receiptPath}'.`);
+    logger.log('Screenshotting receipt...');
+    await page.screenshot({ path: receiptPath });
 
-  await browser.close();
+    logger.log(`All done! View your receipt at '${receiptPath}'.`);
+  } finally {
+    await browser.close();
+  }
 }
 
 async function createDesktopBrowser() {
@@ -78,6 +82,13 @@ async function executeLogin(page: Page) {
   }
 
   await Promise.all([loginButton.click(), waitForNavigationWithTimeout(page)]);
+
+  console.log(page.url());
+
+  const stillOnLoginPage = page.url().includes('login');
+  if (stillOnLoginPage) {
+    throw new Error('Login failed.');
+  }
 }
 
 async function goToCoronavirusForm(page: Page) {
