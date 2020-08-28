@@ -74,6 +74,18 @@ program
     }
   });
 
+program
+  .command('logout')
+  .description('Remove credentials for the Stevenson University Wellness Center')
+  .action(async () => {
+    try {
+      await credentialsProvider.removeCredentials();
+      console.log('Successfully removed credentials.');
+    } catch (error) {
+      console.error(error.message);
+    }
+  });
+
 program.parse();
 
 async function promptUsername() {
