@@ -22,13 +22,15 @@ program
     const receiptPath = path.join(options.output, 'receipt.png');
 
     if (!username) {
-      username = await inquirer.prompt<string>([
+      const usernameInput = await inquirer.prompt([
         {
           name: 'username',
           message: 'Enter your username for Stevenson University:',
           type: 'input',
         },
       ]);
+
+      username = usernameInput.username;
     }
 
     if (!password) {
