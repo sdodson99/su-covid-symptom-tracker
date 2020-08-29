@@ -13,9 +13,9 @@ More configuration may be added upon request. **Please be honest with your daily
 
 1. Install [Node](https://nodejs.org/en/download/).
 
-2. Install 'su-covid-daily-cli' globally with Node.
+2. Install [su-covid-daily-cli](https://www.npmjs.com/package/su-covid-daily-cli) globally with Node.
 
-```bash
+```
 npm install -g su-covid-daily-cli
 ```
 
@@ -23,26 +23,26 @@ npm install -g su-covid-daily-cli
 
 - Submit symptoms.
 
-```bash
+```
 sucovid submit
 ```
 
 - Save credentials.
 
-```bash
+```
 sucovid login
 ```
 
 - Remove credentials.
 
-```bash
+```
 sucovid logout
 ```
 
 - View help.
 
-```bash
-sucovid --help
+```
+sucovid help
 ```
 
 ## Disclaimer
