@@ -21,6 +21,6 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
-    "su-covid-daily": "file:packages/su-covid-daily-1.0.0.tgz"
+    "su-covid-daily": "^1.0.0"
   }
 }
