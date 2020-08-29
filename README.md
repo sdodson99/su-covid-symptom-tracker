@@ -19,7 +19,7 @@ More configuration may be added upon request. **Please be honest with your daily
 npm install -g su-covid-daily-cli
 ```
 
-## Commands
+## Usage
 
 - Submit symptoms.
 

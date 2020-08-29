@@ -2,6 +2,7 @@
   "name": "su-covid-daily-cron",
   "version": "",
   "scripts": {
+    "link": "npm link ../form-automation",
     "build": "tsc",
     "build:production": "npm run prestart && npm prune --production",
     "watch": "tsc --w",
