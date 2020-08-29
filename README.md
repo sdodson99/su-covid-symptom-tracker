@@ -9,41 +9,41 @@ with the following values:
 
 More configuration may be added upon request. **Please be honest with your daily symptom report.**
 
-## Tutorial
+## Installation
 
-1. Clone the [Git](https://git-scm.com/downloads) repository locally.
+1. Install [Node](https://nodejs.org/en/download/).
 
-```
-git clone https://github.com/sdodson99/su-covid-symptom-tracker.git
-```
+2. Install 'su-covid-daily-cli' globally with Node.
 
-2. Open the project directory.
-
-```
-cd su-covid-symptom-tracker/src/cli
+```bash
+npm install -g su-covid-daily-cli
 ```
 
-3. Install [Node](https://nodejs.org/en/download/) packages.
+## Commands
 
-```
-npm i
-```
+- Submit symptoms.
 
-4. Create a file named '.env' with the following configuration. **This information is ONLY used to login to
-   the Wellness Center portal.**
-
-```
-USERNAME=[your Stevenson University username]
-PASSWORD=[your Stevenson University password]
+```bash
+sucovid submit
 ```
 
-5. Run the automated script.
+- Save credentials.
 
-```
-npm run start
+```bash
+sucovid login
 ```
 
-6. (Optional) Observe your receipt at 'dist/receipt.png'.
+- Remove credentials.
+
+```bash
+sucovid logout
+```
+
+- View help.
+
+```bash
+sucovid --help
+```
 
 ## Disclaimer
 
