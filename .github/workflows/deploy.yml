@@ -1,11 +1,14 @@
 name: Deploy
 
 on:
-  push:
-    branches:
-      - master
+  [push]
+  # push:
+  #   branches:
+  #     - master
 
 env:
+  FORM_AUTOMATION_PATH: 'src/form-automation'
+  CLI_PATH: 'src/cli'
   AZURE_FUNCTIONAPP_PATH: 'src/cron-function'
   AZURE_FUNCTIONAPP_NAME: 'su-covid-daily-cron'
   DOCKER_REPOSITORY: 'sdodson/su-covid-cron-function'
@@ -24,29 +27,56 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
 
-      - name: 'Login to Azure CLI'
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
+      # Form Automation
+      - name: 'Install Form Automation packages'
+        run: 'npm i'
+        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
 
-      - name: 'Install Azure Function Core Tools'
-        run: 'npm i -g azure-functions-core-tools@3'
+      - name: 'Build Form Automation'
+        run: 'npm run build'
+        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
 
-      - name: 'Install CRON function local packages'
-        run: 'npm run preinstall:local'
-        working-directory: ${{ env.AZURE_FUNCTIONAPP_PATH }}
+      - name: 'Publish Form Automation'
+        run: 'npm publish'
+        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
-      - name: 'Deploy to Azure Functions'
-        run: 'func azure functionapp publish ${{ env.AZURE_FUNCTIONAPP_NAME }} --build remote --typescript'
-        working-directory: ${{ env.AZURE_FUNCTIONAPP_PATH }}
+      # CLI
+      - name: 'Install CLI packages'
+        run: 'npm i'
+        working-directory: ${{ env.CLI_PATH }}
 
-      - name: 'Deploy Docker Image'
-        uses: docker/build-push-action@v1
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: ${{ env.DOCKER_REPOSITORY }}
-          path: ${{ env.DOCKER_BUILD_CONTEXT }}
-          dockerfile: ${{ env.DOCKERFILE_PATH }}
-          tags: latest
+      - name: 'Build CLI'
+        run: 'npm run build'
+        working-directory: ${{ env.CLI_PATH }}
+
+      - name: 'Publish CLI'
+        run: 'npm publish'
+        working-directory: ${{ env.CLI_PATH }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      # CRON
+      # - name: 'Login to Azure CLI'
+      #   uses: azure/login@v1
+      #   with:
+      #     creds: ${{ secrets.AZURE_RBAC_CREDENTIALS }}
+      # - name: 'Install Azure Function Core Tools'
+      #   run: 'npm i -g azure-functions-core-tools@3'
+      # - name: 'Install CRON function local packages'
+      #   run: 'npm run preinstall:local'
+      #   working-directory: ${{ env.AZURE_FUNCTIONAPP_PATH }}
+      # - name: 'Deploy to Azure Functions'
+      #   run: 'func azure functionapp publish ${{ env.AZURE_FUNCTIONAPP_NAME }} --build remote --typescript'
+      #   working-directory: ${{ env.AZURE_FUNCTIONAPP_PATH }}
+      # - name: 'Deploy Docker Image'
+      #   uses: docker/build-push-action@v1
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+      #     repository: ${{ env.DOCKER_REPOSITORY }}
+      #     path: ${{ env.DOCKER_BUILD_CONTEXT }}
+      #     dockerfile: ${{ env.DOCKERFILE_PATH }}
+      #     tags: latest
