@@ -1,20 +1,33 @@
 {
   "name": "su-covid-daily-cli",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "0.1.3",
+  "description": "Automatically report your daily COVID symptom form to the Wellness Center.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "build": "tsc",
-    "prestart": "cd ../form-automation && npm run build",
-    "start": "tsc && node dist/index.js"
+    "prepare": "npm run build",
+    "link": "npm link ../form-automation",
+    "build": "tsc && cd ../form-automation && npm run build",
+    "prestart": "npm run build",
+    "start": "node dist/index.js"
   },
+  "bin": {
+    "sucovid": "./dist/index.js"
+  },
+  "preferGlobal": true,
+  "files": [
+    "dist/**/*"
+  ],
   "author": "Sean Dodson",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^8.2.0",
-    "su-covid-daily": "file:../form-automation"
+    "commander": "^6.0.0",
+    "inquirer": "^7.3.3",
+    "keytar": "^6.0.1",
+    "su-covid-daily": "^1.0.0"
   },
   "devDependencies": {
+    "@types/inquirer": "^7.3.1",
     "@types/node": "^14.6.0",
     "typescript": "^4.0.2"
   }
