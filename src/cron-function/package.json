@@ -1,7 +1,8 @@
 {
   "name": "su-covid-daily-cron",
-  "version": "",
+  "version": "1.0.4",
   "scripts": {
+    "link": "npm link ../form-automation",
     "build": "tsc",
     "build:production": "npm run prestart && npm prune --production",
     "watch": "tsc --w",
@@ -18,6 +19,6 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
-    "su-covid-daily": "^1.0.3"
+    "su-covid-daily": "^1.0.4"
   }
 }
