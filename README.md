@@ -27,6 +27,12 @@ npm install -g su-covid-daily-cli
 sucovid submit
 ```
 
+- Schedule repeating daily submission.
+
+```
+sucovid schedule
+```
+
 - Save credentials.
 
 ```
