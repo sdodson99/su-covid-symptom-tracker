@@ -12,8 +12,10 @@
     "lint:eslint": "eslint \"src/**/*.*\"",
     "lint:prettier": "prettier --check \"src/**/*.*\"",
     "link": "npm link ../form-automation",
-    "build": "tsc && cd ../form-automation && npm run build",
-    "build:ci": "tsc",
+    "build:dev": "tsc && cd ../form-automation && npm run build",
+    "predev": "npm run build:dev",
+    "dev": "node dist/index.js",
+    "build": "tsc",
     "prestart": "npm run build",
     "start": "node dist/index.js"
   },
