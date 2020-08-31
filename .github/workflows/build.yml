@@ -16,6 +16,8 @@ env:
   FORM_AUTOMATION_PATH: 'src/form-automation'
   CLI_PATH: 'src/cli'
   CRON_FUNCTION_PATH: 'src/cron-function'
+  DOCKER_REPOSITORY: 'sdodson/su-covid-cron-function'
+  DOCKER_BUILD_CONTEXT: 'src/cron-function'
 
 jobs:
   build:
@@ -57,3 +59,10 @@ jobs:
       - name: 'Build CRON function'
         run: 'npm run build'
         working-directory: ${{ env.CRON_FUNCTION_PATH }}
+
+      - name: 'Deploy Docker Image'
+        uses: docker/build-push-action@v1
+        with:
+          repository: ${{ env.DOCKER_REPOSITORY }}
+          path: ${{ env.DOCKER_BUILD_CONTEXT }}
+          push: false
