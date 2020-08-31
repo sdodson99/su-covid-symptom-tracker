@@ -1,6 +1,6 @@
 {
   "name": "su-covid-daily-cli",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Automatically report your daily COVID symptom form to the Wellness Center.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -26,7 +26,7 @@
     "keytar": "^6.0.1",
     "moment": "^2.27.0",
     "node-cron": "^2.0.3",
-    "su-covid-daily": "^1.0.4"
+    "su-covid-daily": "^1.0.5"
   },
   "devDependencies": {
     "@types/inquirer": "^7.3.1",
