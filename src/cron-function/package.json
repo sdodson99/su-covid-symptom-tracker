@@ -19,6 +19,7 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
+    "moment": "^2.27.0",
     "su-covid-daily": "^1.0.5"
   }
 }

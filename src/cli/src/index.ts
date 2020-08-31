@@ -23,7 +23,8 @@ program
   .option('-p, --password <password>', 'Password for Stevenson Univeristy')
   .option('-o, --output <directory>', 'Output directory for submission receipt', process.cwd())
   .action(async (options) => {
-    const receiptPath = path.join(options.output, 'receipt.png');
+    const timeStamp = moment().format();
+    const receiptPath = path.join(options.output, `receipt-${timeStamp}.png`);
     const credentials = await getCredentialsFromOptions(options);
 
     try {
