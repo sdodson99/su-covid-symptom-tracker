@@ -48,7 +48,7 @@ jobs:
         working-directory: ${{ env.CLI_PATH }}
 
       - name: 'Build CLI'
-        run: 'npm run build'
+        run: 'npm run build:ci'
         working-directory: ${{ env.CLI_PATH }}
 
       # CRON
