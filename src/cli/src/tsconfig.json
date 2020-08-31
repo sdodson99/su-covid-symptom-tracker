@@ -5,9 +5,8 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
-    "outDir": "dist",
     "rootDir": ".",
-    "composite": true,
+    "outDir": "../dist/",
     "resolveJsonModule": true,
     "strict": true,
     "moduleResolution": "node",
@@ -15,5 +14,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
   },
-  "files": ["package.json"]
+  "references": [{ "path": "../" }]
 }
