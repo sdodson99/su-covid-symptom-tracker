@@ -1,4 +1,6 @@
-export default interface Credentials {
+interface Credentials {
   username: string;
   password: string;
 }
+
+export default Credentials;
