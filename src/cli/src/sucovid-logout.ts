@@ -10,10 +10,16 @@ const program = new Command();
 program.parse();
 
 (async () => {
-  try {
-    await credentialsProvider.removeCredentials();
-    console.log('Successfully removed credentials.');
-  } catch (error) {
-    console.error(error.message);
+  const isLoggedIn = await credentialsProvider.hasCredentials();
+
+  if (isLoggedIn) {
+    try {
+      await credentialsProvider.removeCredentials();
+      console.log('Successfully logged out.');
+    } catch (error) {
+      console.error(error.message);
+    }
+  } else {
+    console.error('You are not logged in.');
   }
 })();

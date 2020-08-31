@@ -24,15 +24,24 @@ class KeytarCredentialsProvider implements CredentialsProvider {
   }
 
   async saveCredentials(username: string, password: string): Promise<void> {
+    await this.removeCredentials();
     await keytar.setPassword(SERVICE_NAME, username, password);
   }
 
-  async removeCredentials(): Promise<void> {
+  async hasCredentials(): Promise<boolean> {
     const credentials = await this.getCredentials();
 
-    if (credentials) {
-      await keytar.deletePassword(SERVICE_NAME, credentials.username);
-    }
+    return credentials !== null;
+  }
+
+  async removeCredentials(): Promise<void> {
+    const savedCredentialsList = await keytar.findCredentials(SERVICE_NAME);
+
+    const removeCredentialsPromises = savedCredentialsList.map(async (c) => {
+      await keytar.deletePassword(SERVICE_NAME, c.account);
+    });
+
+    await Promise.all(removeCredentialsPromises);
   }
 }
 

@@ -16,21 +16,27 @@ program
 program.parse();
 
 (async () => {
-  let username = program.username;
-  let password = program.password;
+  const isLoggedIn = await credentialsProvider.hasCredentials();
 
-  if (!username) {
-    username = await promptUsername();
-  }
+  if (!isLoggedIn) {
+    let username = program.username;
+    let password = program.password;
 
-  if (!password) {
-    password = await promptPassword();
-  }
+    if (!username) {
+      username = await promptUsername();
+    }
 
-  try {
-    await credentialsProvider.saveCredentials(username, password);
-    console.log('Successfully saved credentials.');
-  } catch (error) {
-    console.error(error.message);
+    if (!password) {
+      password = await promptPassword();
+    }
+
+    try {
+      await credentialsProvider.saveCredentials(username, password);
+      console.log('Successfully logged in.');
+    } catch (error) {
+      console.error(error.message);
+    }
+  } else {
+    console.error('You are already logged in.');
   }
 })();
