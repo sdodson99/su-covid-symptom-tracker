@@ -4,7 +4,9 @@ import moment from 'moment';
 import os from 'os';
 import path from 'path';
 
-const timerTrigger: AzureFunction = async function (context: Context, myTimer: any): Promise<void> {
+const timerTrigger: AzureFunction = async function (
+  context: Context
+): Promise<void> {
   context.log('Starting daily form submission...', new Date().toISOString());
 
   const username = process.env.SU_USERNAME;
