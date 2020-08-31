@@ -1,9 +1,8 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import moment from 'moment';
-import path from 'path';
 import submitForm from 'su-covid-daily';
+import createReceiptPath from './receipts/receipt-path-creator';
 import KeytarCredentialsProvider from './credentials/keytar-credentials-provider';
 import promptCredentialsIfNotProvided from './prompts/credentials-prompt';
 
@@ -18,28 +17,28 @@ program
     '-o, --output <directory>',
     'output directory for submission receipt',
     process.cwd()
-  )
-  .action(async (options) => {
-    const timeStamp = moment().format();
-    const receiptPath = path.join(options.output, `receipt-${timeStamp}.png`);
-
-    const { username, password } = options;
-    const credentials = await promptCredentialsIfNotProvided(
-      username,
-      password,
-      credentialsProvider
-    );
-
-    try {
-      await submitForm(
-        credentials.username,
-        credentials.password,
-        receiptPath,
-        console
-      );
-    } catch (error) {
-      console.error(error.message);
-    }
-  });
+  );
 
 program.parse();
+
+(async () => {
+  const { username, password, output } = program;
+
+  const receiptPath = createReceiptPath(output);
+  const credentials = await promptCredentialsIfNotProvided(
+    username,
+    password,
+    credentialsProvider
+  );
+
+  try {
+    await submitForm(
+      credentials.username,
+      credentials.password,
+      receiptPath,
+      console
+    );
+  } catch (error) {
+    console.error(error.message);
+  }
+})();

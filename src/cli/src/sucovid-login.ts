@@ -11,25 +11,26 @@ const program = new Command();
 
 program
   .option('-u, --username <username>', 'Username for Stevenson Univeristy')
-  .option('-p, --password <password>', 'Password for Stevenson Univeristy')
-  .action(async (options) => {
-    let username = options.username;
-    let password = options.password;
-
-    if (!username) {
-      username = await promptUsername();
-    }
-
-    if (!password) {
-      password = await promptPassword();
-    }
-
-    try {
-      await credentialsProvider.saveCredentials(username, password);
-      console.log('Successfully saved credentials.');
-    } catch (error) {
-      console.error(error.message);
-    }
-  });
+  .option('-p, --password <password>', 'Password for Stevenson Univeristy');
 
 program.parse();
+
+(async () => {
+  let username = program.username;
+  let password = program.password;
+
+  if (!username) {
+    username = await promptUsername();
+  }
+
+  if (!password) {
+    password = await promptPassword();
+  }
+
+  try {
+    await credentialsProvider.saveCredentials(username, password);
+    console.log('Successfully saved credentials.');
+  } catch (error) {
+    console.error(error.message);
+  }
+})();

@@ -7,13 +7,13 @@ const credentialsProvider = new KeytarCredentialsProvider();
 
 const program = new Command();
 
-program.action(async () => {
+program.parse();
+
+(async () => {
   try {
     await credentialsProvider.removeCredentials();
     console.log('Successfully removed credentials.');
   } catch (error) {
     console.error(error.message);
   }
-});
-
-program.parse();
+})();
