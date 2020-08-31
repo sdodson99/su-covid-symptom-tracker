@@ -1,0 +1,37 @@
+name: Deploy Form Automation
+
+on:
+  push:
+    tags:
+      - 'form-automation/v*'
+
+env:
+  FORM_AUTOMATION_PATH: 'src/form-automation'
+
+jobs:
+  build:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@master
+
+      - name: 'Setup Node'
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: 'Install Form Automation packages'
+        run: 'npm i'
+        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
+
+      - name: 'Build Form Automation'
+        run: 'npm run build'
+        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
+
+      - name: 'Publish Form Automation'
+        run: 'npm publish'
+        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

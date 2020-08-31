@@ -1,19 +1,15 @@
-name: Deploy
+name: Deploy CRON Function
 
 on:
   push:
-    branches:
-      - master
-    paths-ignore:
-      - '**/README.md'
+    tags:
+      - 'form-automation/v*'
 
 env:
-  FORM_AUTOMATION_PATH: 'src/form-automation'
-  CLI_PATH: 'src/cli'
   AZURE_FUNCTIONAPP_PATH: 'src/cron-function'
   AZURE_FUNCTIONAPP_NAME: 'su-covid-daily-cron'
   DOCKER_REPOSITORY: 'sdodson/su-covid-cron-function'
-  DOCKER_BUILD_CONTEXT: 'src'
+  DOCKER_BUILD_CONTEXT: 'src/cron-function'
   DOCKERFILE_PATH: 'src/cron-function/Dockerfile'
 
 jobs:
@@ -29,36 +25,6 @@ jobs:
         with:
           node-version: '12.x'
           registry-url: 'https://registry.npmjs.org'
-
-      # Form Automation
-      - name: 'Install Form Automation packages'
-        run: 'npm i'
-        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
-
-      - name: 'Build Form Automation'
-        run: 'npm run build'
-        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
-
-      - name: 'Publish Form Automation'
-        run: 'npm publish'
-        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-
-      # CLI
-      - name: 'Install CLI packages'
-        run: 'npm i'
-        working-directory: ${{ env.CLI_PATH }}
-
-      - name: 'Build CLI'
-        run: 'npm run build'
-        working-directory: ${{ env.CLI_PATH }}
-
-      - name: 'Publish CLI'
-        run: 'npm publish'
-        working-directory: ${{ env.CLI_PATH }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       # CRON
       - name: 'Login to Azure CLI'
