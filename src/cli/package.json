@@ -1,6 +1,6 @@
 {
   "name": "su-covid-daily-cli",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Automatically report your daily COVID symptom form to the Wellness Center.",
   "main": "dist/sucovid.js",
   "types": "dist/sucovid.d.ts",
