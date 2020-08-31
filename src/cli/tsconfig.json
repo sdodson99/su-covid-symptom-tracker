@@ -6,14 +6,12 @@
     "declarationMap": true,
     "sourceMap": true,
     "outDir": "dist",
-    "rootDir": ".",
-    "composite": true,
+    "rootDir": "./src",
     "resolveJsonModule": true,
     "strict": true,
     "moduleResolution": "node",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  },
-  "files": ["package.json"]
+  }
 }
