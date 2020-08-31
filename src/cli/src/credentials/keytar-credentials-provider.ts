@@ -4,7 +4,7 @@ import CredentialsProvider from './credentials-provider';
 
 const SERVICE_NAME = 'SU_COVID';
 
-export default class KeytarCredentialsProvider implements CredentialsProvider {
+class KeytarCredentialsProvider implements CredentialsProvider {
   async getCredentials(): Promise<Credentials | null> {
     const savedCredentialsList = await keytar.findCredentials(SERVICE_NAME);
 
@@ -35,3 +35,5 @@ export default class KeytarCredentialsProvider implements CredentialsProvider {
     }
   }
 }
+
+export default KeytarCredentialsProvider;
