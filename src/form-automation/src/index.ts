@@ -1,8 +1,15 @@
 import { chromium, ChromiumBrowser, Page, Response } from 'playwright-chromium';
 import ILogger from './loggers/logger';
 
-export default async function submitForm(username: string, password: string, receiptPath: string, logger: ILogger) {
-  logger.log('Running automated COVID student symptom tracker form submission.');
+export default async function submitForm(
+  username: string,
+  password: string,
+  receiptPath: string,
+  logger: ILogger
+): Promise<void> {
+  logger.log(
+    'Running automated COVID student symptom tracker form submission.'
+  );
 
   logger.log('Opening patient portal...');
 
@@ -39,7 +46,7 @@ export default async function submitForm(username: string, password: string, rec
 }
 
 async function createDesktopBrowser() {
-  return await chromium.launch();
+  return chromium.launch();
 }
 
 async function createPatientPortalPage(browser: ChromiumBrowser) {
@@ -106,7 +113,10 @@ async function goToCoronavirusForm(page: Page) {
     throw new Error('Coronavirus form start link not found.');
   }
 
-  await Promise.all([formStartLink.click(), waitForNavigationWithTimeout(page)]);
+  await Promise.all([
+    formStartLink.click(),
+    waitForNavigationWithTimeout(page),
+  ]);
 }
 
 async function inputNotOnCampus(page: Page) {
@@ -121,20 +131,27 @@ async function inputNotOnCampus(page: Page) {
 }
 
 async function inputNoCoronavirusContact(page: Page) {
-  const coronavirusContactQuestionSelector = "xpath=//span[contains(text(), '1.')]";
-  const coronavirusContactQuestion = await page.$(coronavirusContactQuestionSelector);
+  const coronavirusContactQuestionSelector =
+    'xpath=//span[contains(text(), "1.")]';
+  const coronavirusContactQuestion = await page.$(
+    coronavirusContactQuestionSelector
+  );
 
   if (!coronavirusContactQuestion) {
     throw new Error('No coronavirus contact question not found.');
   }
 
-  const coronavirusContactQuestionParent = await coronavirusContactQuestion.$('..');
+  const coronavirusContactQuestionParent = await coronavirusContactQuestion.$(
+    '..'
+  );
   if (!coronavirusContactQuestionParent) {
     throw new Error('No coronavirus contact question parent not found.');
   }
 
   const noCoronavirusContactInputSelector = 'select';
-  const noCoronavirusContactInput = await coronavirusContactQuestionParent.$(noCoronavirusContactInputSelector);
+  const noCoronavirusContactInput = await coronavirusContactQuestionParent.$(
+    noCoronavirusContactInputSelector
+  );
 
   if (!noCoronavirusContactInput) {
     throw new Error('No coronavirus contact input not found.');
@@ -145,20 +162,27 @@ async function inputNoCoronavirusContact(page: Page) {
 }
 
 async function inputNoCoronavirusSymptoms(page: Page) {
-  const coronavirusSymptomsQuestionSelector = "xpath=//span[contains(text(), '2.')]";
-  const coronavirusSymptomsQuestion = await page.$(coronavirusSymptomsQuestionSelector);
+  const coronavirusSymptomsQuestionSelector =
+    'xpath=//span[contains(text(), "2.")]';
+  const coronavirusSymptomsQuestion = await page.$(
+    coronavirusSymptomsQuestionSelector
+  );
 
   if (!coronavirusSymptomsQuestion) {
     throw new Error('No coronavirus symptoms question not found.');
   }
 
-  const coronavirusSymptomsQuestionParent = await coronavirusSymptomsQuestion.$('..');
+  const coronavirusSymptomsQuestionParent = await coronavirusSymptomsQuestion.$(
+    '..'
+  );
   if (!coronavirusSymptomsQuestionParent) {
     throw new Error('No coronavirus symptoms question parent not found.');
   }
 
   const noCoronavirusSymptomsInputSelector = 'select';
-  const noCoronavirusSymptomsInput = await coronavirusSymptomsQuestionParent.$(noCoronavirusSymptomsInputSelector);
+  const noCoronavirusSymptomsInput = await coronavirusSymptomsQuestionParent.$(
+    noCoronavirusSymptomsInputSelector
+  );
 
   if (!noCoronavirusSymptomsInput) {
     throw new Error('No coronavirus symptoms input not found.');
@@ -176,10 +200,12 @@ async function executeSubmit(page: Page) {
     throw new Error('Submit button not found.');
   }
 
-  await Promise.all([submitButton.click(), waitForNavigationWithTimeout(page)]);
+  // await Promise.all([submitButton.click(), waitForNavigationWithTimeout(page)]);
 }
 
-async function waitForNavigationWithTimeout(page: Page): Promise<Response | null> {
+async function waitForNavigationWithTimeout(
+  page: Page
+): Promise<Response | null> {
   const timeoutMinutes = 5;
   const timeoutMilliseconds = timeoutMinutes * 60 * 1000;
 

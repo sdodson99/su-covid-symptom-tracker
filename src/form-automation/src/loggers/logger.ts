@@ -1,3 +1,5 @@
-export default interface ILogger {
-  log(message: string): any;
+interface ILogger {
+  log(message: string): void;
 }
+
+export default ILogger;
