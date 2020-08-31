@@ -28,7 +28,7 @@ jobs:
         working-directory: ${{ env.CLI_PATH }}
 
       - name: 'Build CLI'
-        run: 'npm run build:ci'
+        run: 'npm run build'
         working-directory: ${{ env.CLI_PATH }}
 
       - name: 'Publish CLI'

@@ -1,7 +1,9 @@
 import Credentials from './credentials';
 
-export default interface CredentialsProvider {
+interface CredentialsProvider {
   getCredentials(): Promise<Credentials | null>;
   saveCredentials(username: string, password: string): Promise<void>;
   removeCredentials(): Promise<void>;
 }
+
+export default CredentialsProvider;
