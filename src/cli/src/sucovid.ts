@@ -1,14 +1,13 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
+import pkg from '../package.json';
 
 const program = new Command();
 
-const version = process.env.npm_package_version || '';
-
 program
   .name('sucovid')
-  .version(version, '-v, --version', 'output the current version')
+  .version(pkg.version, '-v, --version', 'output the current version')
   .description(
     'quickly submit daily COVID symptoms to the Stevenson University Wellness Center'
   )
