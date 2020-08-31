@@ -1,9 +1,9 @@
 {
   "name": "su-covid-daily-cli",
-  "version": "1.0.5",
+  "version": "1.0.7",
   "description": "Automatically report your daily COVID symptom form to the Wellness Center.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "dist/sucovid.js",
+  "types": "dist/sucovid.d.ts",
   "scripts": {
     "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "eslint --fix \"src/**/*.*\"",
@@ -14,10 +14,10 @@
     "link": "npm link ../form-automation",
     "build:dev": "tsc && cd ../form-automation && npm run build",
     "predev": "npm run build:dev",
-    "dev": "node dist/index.js",
+    "dev": "node dist/sucovid.js",
     "build": "tsc",
     "prestart": "npm run build",
-    "start": "node dist/index.js"
+    "start": "node dist/sucovid.js"
   },
   "husky": {
     "hooks": {
@@ -25,7 +25,7 @@
     }
   },
   "bin": {
-    "sucovid": "./dist/index.js"
+    "sucovid": "./dist/sucovid.js"
   },
   "preferGlobal": true,
   "files": [
