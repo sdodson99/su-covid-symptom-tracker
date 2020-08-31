@@ -5,9 +5,9 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "prepare": "npm run build",
     "link": "npm link ../form-automation",
     "build": "tsc && cd ../form-automation && npm run build",
+    "build:ci": "tsc",
     "prestart": "npm run build",
     "start": "node dist/index.js"
   },

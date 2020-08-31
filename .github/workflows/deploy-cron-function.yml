@@ -10,7 +10,6 @@ env:
   AZURE_FUNCTIONAPP_NAME: 'su-covid-daily-cron'
   DOCKER_REPOSITORY: 'sdodson/su-covid-cron-function'
   DOCKER_BUILD_CONTEXT: 'src/cron-function'
-  DOCKERFILE_PATH: 'src/cron-function/Dockerfile'
 
 jobs:
   build:
@@ -46,5 +45,4 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: ${{ env.DOCKER_REPOSITORY }}
           path: ${{ env.DOCKER_BUILD_CONTEXT }}
-          dockerfile: ${{ env.DOCKERFILE_PATH }}
           tags: latest
