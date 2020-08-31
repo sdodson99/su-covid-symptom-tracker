@@ -3,7 +3,7 @@ name: Deploy CRON Function
 on:
   push:
     tags:
-      - 'form-automation/v*'
+      - 'cron-function/v*'
 
 env:
   AZURE_FUNCTIONAPP_PATH: 'src/cron-function'
