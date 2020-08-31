@@ -1,0 +1,38 @@
+name: Deploy CLI
+
+on:
+  push:
+    tags:
+      - 'cli/v*'
+
+env:
+  CLI_PATH: 'src/cli'
+
+jobs:
+  build:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@master
+
+      - name: 'Setup Node'
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      # CLI
+      - name: 'Install CLI packages'
+        run: 'npm i'
+        working-directory: ${{ env.CLI_PATH }}
+
+      - name: 'Build CLI'
+        run: 'npm run build:ci'
+        working-directory: ${{ env.CLI_PATH }}
+
+      - name: 'Publish CLI'
+        run: 'npm publish'
+        working-directory: ${{ env.CLI_PATH }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

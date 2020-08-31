@@ -1,0 +1,68 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - '*'
+    paths-ignore:
+      - '**/README.md'
+  pull_request:
+    branches:
+      - '*'
+    paths-ignore:
+      - '**/README.md'
+
+env:
+  FORM_AUTOMATION_PATH: 'src/form-automation'
+  CLI_PATH: 'src/cli'
+  CRON_FUNCTION_PATH: 'src/cron-function'
+  DOCKER_REPOSITORY: 'sdodson/su-covid-cron-function'
+  DOCKER_BUILD_CONTEXT: 'src/cron-function'
+
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout'
+        uses: actions/checkout@master
+
+      - name: 'Setup Node'
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
+
+      # Form Automation
+      - name: 'Install Form Automation packages'
+        run: 'npm i'
+        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
+
+      - name: 'Build Form Automation'
+        run: 'npm run build'
+        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
+
+      # CLI
+      - name: 'Install CLI packages'
+        run: 'npm i'
+        working-directory: ${{ env.CLI_PATH }}
+
+      - name: 'Build CLI'
+        run: 'npm run build:ci'
+        working-directory: ${{ env.CLI_PATH }}
+
+      # CRON
+      - name: 'Install CRON function packages'
+        run: 'npm i'
+        working-directory: ${{ env.CRON_FUNCTION_PATH }}
+
+      - name: 'Build CRON function'
+        run: 'npm run build'
+        working-directory: ${{ env.CRON_FUNCTION_PATH }}
+
+      - name: 'Build Docker Image'
+        uses: docker/build-push-action@v1
+        with:
+          repository: ${{ env.DOCKER_REPOSITORY }}
+          path: ${{ env.DOCKER_BUILD_CONTEXT }}
+          push: false

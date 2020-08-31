@@ -1,6 +1,6 @@
 {
   "name": "su-covid-daily-cron",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "scripts": {
     "link": "npm link ../form-automation",
     "build": "tsc",
@@ -19,6 +19,6 @@
     "typescript": "^3.3.3"
   },
   "dependencies": {
-    "su-covid-daily": "^1.0.4"
+    "su-covid-daily": "^1.0.5"
   }
 }
