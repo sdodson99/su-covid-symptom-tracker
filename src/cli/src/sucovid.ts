@@ -6,8 +6,6 @@ const version = '1.0.10';
 
 const program = new Command();
 
-console.log(process.env.NODE_ENV);
-
 program
   .name('sucovid')
   .version(version, '-v, --version', 'output the current version')
