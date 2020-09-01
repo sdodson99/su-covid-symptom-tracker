@@ -3,9 +3,9 @@
 import { Command } from 'commander';
 import promptUsername from './prompts/username-prompt';
 import promptPassword from './prompts/password-prompt';
-import KeytarCredentialsProvider from './credentials/keytar-credentials-provider';
-
-const credentialsProvider = new KeytarCredentialsProvider();
+import container from './containers/sucovid-container';
+import ContainerType from './containers/container-type';
+import CredentialsProvider from './credentials/credentials-provider';
 
 const program = new Command();
 
@@ -16,6 +16,10 @@ program
 program.parse();
 
 (async () => {
+  const credentialsProvider = container.get<CredentialsProvider>(
+    ContainerType.CredentialsProvider
+  );
+
   const isLoggedIn = await credentialsProvider.hasCredentials();
 
   if (!isLoggedIn) {

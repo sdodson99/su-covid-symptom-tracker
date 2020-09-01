@@ -36,9 +36,11 @@
   "dependencies": {
     "commander": "^6.0.0",
     "inquirer": "^7.3.3",
+    "inversify": "^5.0.1",
     "keytar": "^6.0.1",
     "moment": "^2.27.0",
     "node-cron": "^2.0.3",
+    "reflect-metadata": "^0.1.13",
     "su-covid-daily": "^1.0.5"
   },
   "devDependencies": {

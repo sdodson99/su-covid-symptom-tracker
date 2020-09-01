@@ -7,9 +7,9 @@ import moment from 'moment';
 import submitForm from 'su-covid-daily';
 import createReceiptPath from './receipts/receipt-path-creator';
 import promptCredentialsIfNotProvided from './prompts/credentials-prompt';
-import KeytarCredentialsProvider from './credentials/keytar-credentials-provider';
-
-const credentialsProvider = new KeytarCredentialsProvider();
+import container from './containers/sucovid-container';
+import ContainerType from './containers/container-type';
+import CredentialsProvider from './credentials/credentials-provider';
 
 const program = new Command();
 
@@ -28,6 +28,10 @@ program
 program.parse();
 
 (async () => {
+  const credentialsProvider = container.get<CredentialsProvider>(
+    ContainerType.CredentialsProvider
+  );
+
   const { username, password, output } = program;
 
   const receiptPath = createReceiptPath(output);
