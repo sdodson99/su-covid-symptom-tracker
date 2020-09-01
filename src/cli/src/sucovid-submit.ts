@@ -1,12 +1,9 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import submitForm from 'su-covid-daily';
-import createReceiptPath from './receipts/receipt-path-creator';
-import promptCredentialsIfNotProvided from './prompts/credentials-prompt';
 import container from './containers/sucovid-container';
 import ContainerType from './containers/container-type';
-import CredentialsProvider from './credentials/credentials-provider';
+import SUCOVIDSubmitHandler from './command-handlers/su-covid-submit-handler';
 
 const program = new Command();
 
@@ -21,28 +18,10 @@ program
 
 program.parse();
 
-(async () => {
-  const credentialsProvider = container.get<CredentialsProvider>(
-    ContainerType.CredentialsProvider
-  );
+const { username, password, output } = program;
 
-  const { username, password, output } = program;
+const submitHandler = container.get<SUCOVIDSubmitHandler>(
+  ContainerType.SUCOVIDSubmitHandler
+);
 
-  const receiptPath = createReceiptPath(output);
-  const credentials = await promptCredentialsIfNotProvided(
-    username,
-    password,
-    credentialsProvider
-  );
-
-  try {
-    await submitForm(
-      credentials.username,
-      credentials.password,
-      receiptPath,
-      console
-    );
-  } catch (error) {
-    console.error(error.message);
-  }
-})();
+submitHandler.handleSubmit(username, password, output);
