@@ -2,7 +2,7 @@
 
 import { Command } from 'commander';
 
-const version = '1.0.10';
+const version = '1.0.11';
 
 const program = new Command();
 
