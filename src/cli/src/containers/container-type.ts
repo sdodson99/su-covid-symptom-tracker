@@ -4,6 +4,7 @@ const ContainerType = {
   SUCOVIDLogoutHandler: Symbol.for('SUCOVIDLogoutHandler'),
   SUCOVIDSubmitHandler: Symbol.for('SUCOVIDSubmitHandler'),
   SUCOVIDScheduleHandler: Symbol.for('SUCOVIDScheduleHandler'),
+  SUCOVIDFormSubmitter: Symbol.for('SUCOVIDFormSubmitter'),
 };
 
 export default ContainerType;
