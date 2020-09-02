@@ -34,8 +34,9 @@ container
   .bind<SUCOVIDScheduleHandler>(ContainerType.SUCOVIDScheduleHandler)
   .to(SUCOVIDScheduleHandler);
 
+const skipSubmission = process.env.NODE_ENV === 'development';
 container
   .bind<SUCOVIDFormSubmitter>(ContainerType.SUCOVIDFormSubmitter)
-  .toDynamicValue(() => new PlaywrightSUCOVIDFormSubmitter(console));
+  .toConstantValue(new PlaywrightSUCOVIDFormSubmitter(console, skipSubmission));
 
 export default container;

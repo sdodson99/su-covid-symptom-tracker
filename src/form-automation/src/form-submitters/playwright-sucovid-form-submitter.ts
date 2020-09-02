@@ -4,9 +4,11 @@ import Logger from '../loggers/logger';
 
 class PlaywrightSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   private logger: Logger;
+  private skipSubmission: boolean;
 
-  constructor(logger: Logger) {
+  constructor(logger: Logger, skipSubmission = false) {
     this.logger = logger;
+    this.skipSubmission = skipSubmission;
   }
 
   async submitForm(
@@ -39,9 +41,14 @@ class PlaywrightSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       await this.inputNoCoronavirusContact(page);
       await this.inputNoCoronavirusSymptoms(page);
 
-      this.logger.log('Submitting form...');
-      await this.executeSubmit(page);
-      this.logger.log('Form submission successful.');
+      // TBD: Convert to polymorphic solution.
+      if (!this.skipSubmission) {
+        this.logger.log('Submitting form...');
+        await this.executeSubmit(page);
+        this.logger.log('Form submission successful.');
+      } else {
+        this.logger.warn('Skipping form submission.');
+      }
 
       this.logger.log('Screenshotting receipt...');
       await page.screenshot({ path: receiptPath });
