@@ -1,9 +1,11 @@
+import { injectable } from 'inversify';
 import keytar from 'keytar';
 import Credentials from './credentials';
 import CredentialsProvider from './credentials-provider';
 
 const SERVICE_NAME = 'SU_COVID';
 
+@injectable()
 class KeytarCredentialsProvider implements CredentialsProvider {
   async getCredentials(): Promise<Credentials | null> {
     const savedCredentialsList = await keytar.findCredentials(SERVICE_NAME);

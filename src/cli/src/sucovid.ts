@@ -2,9 +2,9 @@
 
 import { Command } from 'commander';
 
-const program = new Command();
+const version = '1.0.10';
 
-const version = process.env.npm_package_version || '';
+const program = new Command();
 
 program
   .name('sucovid')

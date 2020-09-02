@@ -1,25 +1,16 @@
 #!/usr/bin/env node
 
 import { Command } from 'commander';
-import KeytarCredentialsProvider from './credentials/keytar-credentials-provider';
-
-const credentialsProvider = new KeytarCredentialsProvider();
+import container from './containers/sucovid-container';
+import ContainerType from './containers/container-type';
+import SUCOVIDLogoutHandler from './command-handlers/su-covid-logout-handler';
 
 const program = new Command();
 
 program.parse();
 
-(async () => {
-  const isLoggedIn = await credentialsProvider.hasCredentials();
+const logoutHandler = container.get<SUCOVIDLogoutHandler>(
+  ContainerType.SUCOVIDLogoutHandler
+);
 
-  if (isLoggedIn) {
-    try {
-      await credentialsProvider.removeCredentials();
-      console.log('Successfully logged out.');
-    } catch (error) {
-      console.error(error.message);
-    }
-  } else {
-    console.error('You are not logged in.');
-  }
-})();
+logoutHandler.handleLogout();
