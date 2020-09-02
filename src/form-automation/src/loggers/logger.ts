@@ -1,5 +1,5 @@
-interface ILogger {
+interface Logger {
   log(message: string): void;
 }
 
-export default ILogger;
+export default Logger;
