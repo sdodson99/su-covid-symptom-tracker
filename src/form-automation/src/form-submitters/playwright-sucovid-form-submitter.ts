@@ -1,5 +1,5 @@
 import { chromium, ChromiumBrowser, Page, Response } from 'playwright-chromium';
-import SUCOVIDFormSubmitter from './su-covid-form-submitter';
+import SUCOVIDFormSubmitter from './sucovid-form-submitter';
 import Logger from '../loggers/logger';
 
 class PlaywrightSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
