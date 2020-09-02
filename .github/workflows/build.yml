@@ -47,6 +47,10 @@ jobs:
         run: 'npm i'
         working-directory: ${{ env.CLI_PATH }}
 
+      - name: 'Link Form Automation'
+        run: 'npm run link'
+        working-directory: ${{ env.CLI_PATH }}
+
       - name: 'Build CLI'
         run: 'npm run build'
         working-directory: ${{ env.CLI_PATH }}
@@ -54,6 +58,10 @@ jobs:
       # CRON
       - name: 'Install CRON function packages'
         run: 'npm i'
+        working-directory: ${{ env.CRON_FUNCTION_PATH }}
+
+      - name: 'Link Form Automation'
+        run: 'npm run link'
         working-directory: ${{ env.CRON_FUNCTION_PATH }}
 
       - name: 'Build CRON function'
