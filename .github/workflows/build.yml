@@ -67,10 +67,3 @@ jobs:
       - name: 'Build CRON function'
         run: 'npm run build'
         working-directory: ${{ env.CRON_FUNCTION_PATH }}
-
-      - name: 'Build Docker Image'
-        uses: docker/build-push-action@v1
-        with:
-          repository: ${{ env.DOCKER_REPOSITORY }}
-          path: ${{ env.DOCKER_BUILD_CONTEXT }}
-          push: false
