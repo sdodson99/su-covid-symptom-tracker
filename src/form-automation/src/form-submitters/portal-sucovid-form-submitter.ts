@@ -1,12 +1,19 @@
-import { chromium, ChromiumBrowser, Page, Response } from 'playwright-chromium';
+import { Page, Response, Browser } from 'playwright-chromium';
 import SUCOVIDFormSubmitter from './sucovid-form-submitter';
 import Logger from '../loggers/logger';
+import BrowserFactory from '../browsers/browser-factory';
 
 class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   private logger: Logger;
   private skipSubmission: boolean;
+  private browserFactory: BrowserFactory;
 
-  constructor(logger: Logger, skipSubmission = false) {
+  constructor(
+    browserFactory: BrowserFactory,
+    logger: Logger,
+    skipSubmission = false
+  ) {
+    this.browserFactory = browserFactory;
     this.logger = logger;
     this.skipSubmission = skipSubmission;
   }
@@ -22,7 +29,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
 
     this.logger.log('Opening patient portal...');
 
-    const browser = await this.createDesktopBrowser();
+    const browser = await this.browserFactory.createBrowser();
 
     try {
       const page = await this.createPatientPortalPage(browser);
@@ -59,11 +66,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     }
   }
 
-  createDesktopBrowser(): Promise<ChromiumBrowser> {
-    return chromium.launch();
-  }
-
-  async createPatientPortalPage(browser: ChromiumBrowser): Promise<Page> {
+  async createPatientPortalPage(browser: Browser): Promise<Page> {
     const page = await browser.newPage();
 
     const patientPortalUrl = 'https://stevenson.medicatconnect.com/';
