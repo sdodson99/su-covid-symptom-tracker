@@ -2,7 +2,7 @@ import { chromium, ChromiumBrowser, Page, Response } from 'playwright-chromium';
 import SUCOVIDFormSubmitter from './sucovid-form-submitter';
 import Logger from '../loggers/logger';
 
-class PlaywrightSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
+class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   private logger: Logger;
   private skipSubmission: boolean;
 
@@ -234,4 +234,4 @@ class PlaywrightSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   }
 }
 
-export default PlaywrightSUCOVIDFormSubmitter;
+export default PortalSUCOVIDFormSubmitter;

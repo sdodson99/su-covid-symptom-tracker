@@ -9,7 +9,7 @@ import SUCOVIDSubmitHandler from '../command-handlers/su-covid-submit-handler';
 import SUCOVIDScheduleHandler from '../command-handlers/su-covid-schedule-handler';
 import {
   SUCOVIDFormSubmitter,
-  PlaywrightSUCOVIDFormSubmitter,
+  PortalSUCOVIDFormSubmitter,
 } from 'su-covid-daily';
 
 const container = new Container();
@@ -37,6 +37,6 @@ container
 const skipSubmission = process.env.NODE_ENV === 'development';
 container
   .bind<SUCOVIDFormSubmitter>(ContainerType.SUCOVIDFormSubmitter)
-  .toConstantValue(new PlaywrightSUCOVIDFormSubmitter(console, skipSubmission));
+  .toConstantValue(new PortalSUCOVIDFormSubmitter(console, skipSubmission));
 
 export default container;

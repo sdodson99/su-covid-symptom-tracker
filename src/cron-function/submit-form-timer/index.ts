@@ -1,5 +1,5 @@
 import { AzureFunction, Context } from '@azure/functions';
-import { PlaywrightSUCOVIDFormSubmitter } from 'su-covid-daily';
+import { PortalSUCOVIDFormSubmitter } from 'su-covid-daily';
 import moment from 'moment';
 import os from 'os';
 import path from 'path';
@@ -12,7 +12,7 @@ const timerTrigger: AzureFunction = async function (
 
   const contextLogger = new ContextLogger(context);
   const skipSubmission = process.env.SU_SKIPSUBMISSION == 'true';
-  const formSubmitter = new PlaywrightSUCOVIDFormSubmitter(
+  const formSubmitter = new PortalSUCOVIDFormSubmitter(
     contextLogger,
     skipSubmission
   );
