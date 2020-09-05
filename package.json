@@ -1,0 +1,25 @@
+{
+  "name": "su-covid-daily-root",
+  "version": "1.0.0",
+  "description": "Automatically report your daily COVID symptom form to the Wellness Center.",
+  "scripts": {
+    "fix": "npm run fix:cli && npm run fix:cronfunction && npm run fix:formautomation",
+    "fix:cli": "npm run --prefix src/cli fix",
+    "fix:cronfunction": "npm run --prefix src/cron-function fix",
+    "fix:formautomation": "npm run --prefix src/form-automation fix",
+    "lint": "npm run lint:cli && npm run lint:cronfunction && npm run lint:formautomation",
+    "lint:cli": "npm run --prefix src/cli lint",
+    "lint:cronfunction": "npm run --prefix src/cron-function lint",
+    "lint:formautomation": "npm run --prefix src/form-automation lint"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run fix"
+    }
+  },
+  "author": "Sean Dodson",
+  "license": "ISC",
+  "devDependencies": {
+    "husky": "^4.2.5"
+  }
+}

@@ -17,11 +17,6 @@
     "start": "npm-run-all --parallel start:host watch",
     "test": "echo \"No tests yet...\""
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run fix"
-    }
-  },
   "description": "",
   "devDependencies": {
     "@azure/functions": "^1.0.1-beta1",
@@ -35,7 +30,6 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "husky": "^4.2.5",
     "prettier": "^2.1.1",
     "typescript": "^3.3.3"
   },
