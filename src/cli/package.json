@@ -12,7 +12,7 @@
     "lint:eslint": "eslint \"src/**/*.*\"",
     "lint:prettier": "prettier --check \"src/**/*.*\"",
     "link": "npm link ../form-automation",
-    "dev": "NODE_ENV=development npm run start",
+    "dev": "NODE_ENV=development npm run --prefix ../form-automation build && npm run start",
     "build": "tsc",
     "prestart": "npm run build",
     "start": "node dist/sucovid.js"
