@@ -3,6 +3,21 @@ import SUCOVIDFormSubmitter from './sucovid-form-submitter';
 import Logger from '../loggers/logger';
 import BrowserFactory from '../browsers/browser-factory';
 
+const Constants = {
+  PATIENT_PORTAL_URL: 'https://stevenson.medicatconnect.com/',
+  USERNAME_INPUT_SELECTOR: '#ctl00_loginBar_txtUserName',
+  PASSWORD_INPUT_SELECTOR: '#ctl00_loginBar_txtPassword',
+  LOGIN_BUTTON_SELECTOR: '#ctl00_loginBar_lbtnLogin',
+  COVID_NAV_LINK_SELECTOR: '#ctl00_navBar_liStatus a',
+  COVID_FORM_START_SELECTOR: '#ctl00_ContentPlaceHolder1_lblStatusForm a',
+  NOT_ON_CAMPUS_INPUT_SELECTOR: '#ctl00_ContentPlaceHolder1_44954No',
+  COVID_CONTACT_QUESTION_SELECTOR: 'xpath=//span[contains(text(), "1.")]',
+  NO_COVID_CONTACT_INPUT_SELECTOR: '23894',
+  COVID_SYMPTOMS_QUESTION_SELECTOR: 'xpath=//span[contains(text(), "2.")]',
+  NO_COVID_SYMPTOMS_INPUT_SELECTOR: '23896',
+  SUBMIT_BUTTON_SELECTOR: '#ctl00_ContentPlaceHolder1_lbtnSubmit',
+};
+
 class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   private logger: Logger;
   private skipSubmission: boolean;
@@ -69,15 +84,13 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   async createPatientPortalPage(browser: Browser): Promise<Page> {
     const page = await browser.newPage();
 
-    const patientPortalUrl = 'https://stevenson.medicatconnect.com/';
-    await page.goto(patientPortalUrl);
+    await page.goto(Constants.PATIENT_PORTAL_URL);
 
     return page;
   }
 
   async inputUsername(page: Page, username: string): Promise<void> {
-    const usernameInputSelector = '#ctl00_loginBar_txtUserName';
-    const usernameInput = await page.$(usernameInputSelector);
+    const usernameInput = await page.$(Constants.USERNAME_INPUT_SELECTOR);
 
     if (!usernameInput) {
       throw new Error('Username input not found.');
@@ -87,8 +100,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   }
 
   async inputPassword(page: Page, password: string): Promise<void> {
-    const passwordInputSelector = '#ctl00_loginBar_txtPassword';
-    const passwordInput = await page.$(passwordInputSelector);
+    const passwordInput = await page.$(Constants.PASSWORD_INPUT_SELECTOR);
 
     if (!passwordInput) {
       throw new Error('Password input not found.');
@@ -98,8 +110,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   }
 
   async executeLogin(page: Page): Promise<void> {
-    const loginButtonSelector = '#ctl00_loginBar_lbtnLogin';
-    const loginButton = await page.$(loginButtonSelector);
+    const loginButton = await page.$(Constants.LOGIN_BUTTON_SELECTOR);
 
     if (!loginButton) {
       throw new Error('Login button not found.');
@@ -117,8 +128,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   }
 
   async goToCoronavirusForm(page: Page): Promise<void> {
-    const covidNavLinkSelector = '#ctl00_navBar_liStatus a';
-    const covidNavLink = await page.$(covidNavLinkSelector);
+    const covidNavLink = await page.$(Constants.COVID_NAV_LINK_SELECTOR);
 
     if (!covidNavLink) {
       throw new Error('Coronavirus navigation link not found.');
@@ -129,8 +139,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       this.waitForNavigationWithTimeout(page),
     ]);
 
-    const formStartLinkSelector = '#ctl00_ContentPlaceHolder1_lblStatusForm a';
-    const formStartLink = await page.$(formStartLinkSelector);
+    const formStartLink = await page.$(Constants.COVID_FORM_START_SELECTOR);
 
     if (!formStartLink) {
       throw new Error('Coronavirus form start link not found.');
@@ -143,8 +152,9 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   }
 
   async inputNotOnCampus(page: Page): Promise<void> {
-    const notOnCampusInputSelector = '#ctl00_ContentPlaceHolder1_44954No';
-    const notOnCampusInput = await page.$(notOnCampusInputSelector);
+    const notOnCampusInput = await page.$(
+      Constants.NOT_ON_CAMPUS_INPUT_SELECTOR
+    );
 
     if (!notOnCampusInput) {
       throw new Error('Not on campus input not found.');
@@ -154,10 +164,8 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   }
 
   async inputNoCoronavirusContact(page: Page): Promise<void> {
-    const coronavirusContactQuestionSelector =
-      'xpath=//span[contains(text(), "1.")]';
     const coronavirusContactQuestion = await page.$(
-      coronavirusContactQuestionSelector
+      Constants.COVID_CONTACT_QUESTION_SELECTOR
     );
 
     if (!coronavirusContactQuestion) {
@@ -167,6 +175,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     const coronavirusContactQuestionParent = await coronavirusContactQuestion.$(
       '..'
     );
+
     if (!coronavirusContactQuestionParent) {
       throw new Error('No coronavirus contact question parent not found.');
     }
@@ -180,15 +189,14 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       throw new Error('No coronavirus contact input not found.');
     }
 
-    const noOptionValue = '23894';
-    await noCoronavirusContactInput.selectOption(noOptionValue);
+    await noCoronavirusContactInput.selectOption(
+      Constants.NO_COVID_CONTACT_INPUT_SELECTOR
+    );
   }
 
   async inputNoCoronavirusSymptoms(page: Page): Promise<void> {
-    const coronavirusSymptomsQuestionSelector =
-      'xpath=//span[contains(text(), "2.")]';
     const coronavirusSymptomsQuestion = await page.$(
-      coronavirusSymptomsQuestionSelector
+      Constants.COVID_SYMPTOMS_QUESTION_SELECTOR
     );
 
     if (!coronavirusSymptomsQuestion) {
@@ -211,13 +219,13 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       throw new Error('No coronavirus symptoms input not found.');
     }
 
-    const noOptionValue = '23896';
-    await noCoronavirusSymptomsInput.selectOption(noOptionValue);
+    await noCoronavirusSymptomsInput.selectOption(
+      Constants.NO_COVID_SYMPTOMS_INPUT_SELECTOR
+    );
   }
 
   async executeSubmit(page: Page): Promise<void> {
-    const submitButtonSelector = '#ctl00_ContentPlaceHolder1_lbtnSubmit';
-    const submitButton = await page.$(submitButtonSelector);
+    const submitButton = await page.$(Constants.SUBMIT_BUTTON_SELECTOR);
 
     if (!submitButton) {
       throw new Error('Submit button not found.');
@@ -238,3 +246,5 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
 }
 
 export default PortalSUCOVIDFormSubmitter;
+
+export { Constants };
