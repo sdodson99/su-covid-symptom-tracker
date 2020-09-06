@@ -10,8 +10,7 @@ class SUCOVIDFormSubmitterBuilder {
   private skipSubmission: boolean;
 
   constructor(browserFactory?: PlaywrightChromiumBrowserFactory) {
-    this.browserFactory =
-      browserFactory || new PlaywrightChromiumBrowserFactory();
+    this.browserFactory = browserFactory || new PlaywrightChromiumBrowserFactory();
     this.logger = console;
     this.skipSubmission = false;
   }
@@ -27,11 +26,7 @@ class SUCOVIDFormSubmitterBuilder {
   }
 
   build(): SUCOVIDFormSubmitter {
-    return new PortalSUCOVIDFormSubmitter(
-      this.browserFactory,
-      this.logger,
-      this.skipSubmission
-    );
+    return new PortalSUCOVIDFormSubmitter(this.browserFactory, this.logger, this.skipSubmission);
   }
 }
 

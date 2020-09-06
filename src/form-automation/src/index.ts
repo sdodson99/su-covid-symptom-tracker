@@ -3,9 +3,4 @@ import PortalSUCOVIDFormSubmitter from './form-submitters/portal-sucovid-form-su
 import SUCOVIDFormSubmitterBuilder from './form-submitters/sucovid-form-submitter-builder';
 import Logger from './loggers/logger';
 
-export {
-  SUCOVIDFormSubmitter,
-  SUCOVIDFormSubmitterBuilder,
-  PortalSUCOVIDFormSubmitter,
-  Logger,
-};
+export { SUCOVIDFormSubmitter, SUCOVIDFormSubmitterBuilder, PortalSUCOVIDFormSubmitter, Logger };

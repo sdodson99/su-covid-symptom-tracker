@@ -2,6 +2,7 @@ import { Page, Response, Browser } from 'playwright-chromium';
 import SUCOVIDFormSubmitter from './sucovid-form-submitter';
 import Logger from '../loggers/logger';
 import BrowserFactory from '../browsers/browser-factory';
+import SUCOVIDFormSubmissionExecutor from '../form-submission-executors/sucovid-form-submission-executor';
 
 const Constants = {
   PATIENT_PORTAL_URL: 'https://stevenson.medicatconnect.com/',
@@ -19,28 +20,18 @@ const Constants = {
 };
 
 class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
-  private logger: Logger;
-  private skipSubmission: boolean;
   private browserFactory: BrowserFactory;
+  private submissionExecutor: SUCOVIDFormSubmissionExecutor;
+  private logger: Logger;
 
-  constructor(
-    browserFactory: BrowserFactory,
-    logger: Logger,
-    skipSubmission = false
-  ) {
+  constructor(browserFactory: BrowserFactory, submissionExecutor: SUCOVIDFormSubmissionExecutor, logger: Logger) {
     this.browserFactory = browserFactory;
+    this.submissionExecutor = submissionExecutor;
     this.logger = logger;
-    this.skipSubmission = skipSubmission;
   }
 
-  async submitForm(
-    username: string,
-    password: string,
-    receiptPath: string
-  ): Promise<void> {
-    this.logger.log(
-      'Running automated COVID student symptom tracker form submission.'
-    );
+  async submitForm(username: string, password: string): Promise<void> {
+    this.logger.log('Running automated COVID student symptom tracker form submission.');
 
     this.logger.log('Opening patient portal...');
 
@@ -63,19 +54,9 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       await this.inputNoCoronavirusContact(page);
       await this.inputNoCoronavirusSymptoms(page);
 
-      // TBD: Convert to polymorphic solution.
-      if (!this.skipSubmission) {
-        this.logger.log('Submitting form...');
-        await this.executeSubmit(page);
-        this.logger.log('Form submission successful.');
-      } else {
-        this.logger.warn('Skipping form submission.');
-      }
+      await this.submissionExecutor.executeSubmit(page);
 
-      this.logger.log('Screenshotting receipt...');
-      await page.screenshot({ path: receiptPath });
-
-      this.logger.log(`All done! View your receipt at '${receiptPath}'.`);
+      this.logger.log('All done!');
     } finally {
       await browser.close();
     }
@@ -116,10 +97,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       throw new Error('Login button not found.');
     }
 
-    await Promise.all([
-      loginButton.click(),
-      this.waitForNavigationWithTimeout(page),
-    ]);
+    await Promise.all([loginButton.click(), this.waitForNavigationWithTimeout(page)]);
 
     const stillOnLoginPage = page.url().includes('login');
     if (stillOnLoginPage) {
@@ -134,10 +112,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       throw new Error('Coronavirus navigation link not found.');
     }
 
-    await Promise.all([
-      covidNavLink.click(),
-      this.waitForNavigationWithTimeout(page),
-    ]);
+    await Promise.all([covidNavLink.click(), this.waitForNavigationWithTimeout(page)]);
 
     const formStartLink = await page.$(Constants.COVID_FORM_START_SELECTOR);
 
@@ -145,16 +120,11 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       throw new Error('Coronavirus form start link not found.');
     }
 
-    await Promise.all([
-      formStartLink.click(),
-      this.waitForNavigationWithTimeout(page),
-    ]);
+    await Promise.all([formStartLink.click(), this.waitForNavigationWithTimeout(page)]);
   }
 
   async inputNotOnCampus(page: Page): Promise<void> {
-    const notOnCampusInput = await page.$(
-      Constants.NOT_ON_CAMPUS_INPUT_SELECTOR
-    );
+    const notOnCampusInput = await page.$(Constants.NOT_ON_CAMPUS_INPUT_SELECTOR);
 
     if (!notOnCampusInput) {
       throw new Error('Not on campus input not found.');
@@ -164,77 +134,48 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   }
 
   async inputNoCoronavirusContact(page: Page): Promise<void> {
-    const coronavirusContactQuestion = await page.$(
-      Constants.COVID_CONTACT_QUESTION_SELECTOR
-    );
+    const coronavirusContactQuestion = await page.$(Constants.COVID_CONTACT_QUESTION_SELECTOR);
 
     if (!coronavirusContactQuestion) {
       throw new Error('No coronavirus contact question not found.');
     }
 
-    const coronavirusContactQuestionParent = await coronavirusContactQuestion.$(
-      '..'
-    );
+    const coronavirusContactQuestionParent = await coronavirusContactQuestion.$('..');
 
     if (!coronavirusContactQuestionParent) {
       throw new Error('No coronavirus contact question parent not found.');
     }
 
     const noCoronavirusContactInputSelector = 'select';
-    const noCoronavirusContactInput = await coronavirusContactQuestionParent.$(
-      noCoronavirusContactInputSelector
-    );
+    const noCoronavirusContactInput = await coronavirusContactQuestionParent.$(noCoronavirusContactInputSelector);
 
     if (!noCoronavirusContactInput) {
       throw new Error('No coronavirus contact input not found.');
     }
 
-    await noCoronavirusContactInput.selectOption(
-      Constants.NO_COVID_CONTACT_INPUT_SELECTOR
-    );
+    await noCoronavirusContactInput.selectOption(Constants.NO_COVID_CONTACT_INPUT_SELECTOR);
   }
 
   async inputNoCoronavirusSymptoms(page: Page): Promise<void> {
-    const coronavirusSymptomsQuestion = await page.$(
-      Constants.COVID_SYMPTOMS_QUESTION_SELECTOR
-    );
+    const coronavirusSymptomsQuestion = await page.$(Constants.COVID_SYMPTOMS_QUESTION_SELECTOR);
 
     if (!coronavirusSymptomsQuestion) {
       throw new Error('No coronavirus symptoms question not found.');
     }
 
-    const coronavirusSymptomsQuestionParent = await coronavirusSymptomsQuestion.$(
-      '..'
-    );
+    const coronavirusSymptomsQuestionParent = await coronavirusSymptomsQuestion.$('..');
     if (!coronavirusSymptomsQuestionParent) {
       throw new Error('No coronavirus symptoms question parent not found.');
     }
 
     const noCoronavirusSymptomsInputSelector = 'select';
-    const noCoronavirusSymptomsInput = await coronavirusSymptomsQuestionParent.$(
-      noCoronavirusSymptomsInputSelector
-    );
+    const noCoronavirusSymptomsInput = await coronavirusSymptomsQuestionParent.$(noCoronavirusSymptomsInputSelector);
 
     if (!noCoronavirusSymptomsInput) {
       throw new Error('No coronavirus symptoms input not found.');
     }
 
-    await noCoronavirusSymptomsInput.selectOption(
-      Constants.NO_COVID_SYMPTOMS_INPUT_SELECTOR
-    );
-  }
-
-  async executeSubmit(page: Page): Promise<void> {
-    const submitButton = await page.$(Constants.SUBMIT_BUTTON_SELECTOR);
-
-    if (!submitButton) {
-      throw new Error('Submit button not found.');
-    }
-
-    await Promise.all([
-      submitButton.click(),
-      this.waitForNavigationWithTimeout(page),
-    ]);
+    await noCoronavirusSymptomsInput.selectOption(Constants.NO_COVID_SYMPTOMS_INPUT_SELECTOR);
   }
 
   async waitForNavigationWithTimeout(page: Page): Promise<Response | null> {
