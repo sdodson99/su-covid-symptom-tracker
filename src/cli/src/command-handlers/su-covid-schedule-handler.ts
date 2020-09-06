@@ -3,23 +3,23 @@ import ContainerType from '../containers/container-type';
 import inquirer from 'inquirer';
 import cron from 'node-cron';
 import moment from 'moment';
-import { SUCOVIDFormSubmitter } from 'su-covid-daily';
+import { SUCOVIDFormSubmitterBuilder } from 'su-covid-daily';
 import createReceiptPath from '../receipts/receipt-path-creator';
 import promptCredentialsIfNotProvided from '../prompts/credentials-prompt';
 import CredentialsProvider from '../credentials/credentials-provider';
 
 @injectable()
 class SUCOVIDScheduleHandler {
-  private formSubmitter: SUCOVIDFormSubmitter;
+  private formSubmitterBuilder: SUCOVIDFormSubmitterBuilder;
   private credentialsProvider: CredentialsProvider;
 
   constructor(
-    @inject(ContainerType.SUCOVIDFormSubmitter)
-    formSubmitter: SUCOVIDFormSubmitter,
+    @inject(ContainerType.SUCOVIDFormSubmitterBuilder)
+    formSubmitterBuilder: SUCOVIDFormSubmitterBuilder,
     @inject(ContainerType.CredentialsProvider)
     credentialsProvider: CredentialsProvider
   ) {
-    this.formSubmitter = formSubmitter;
+    this.formSubmitterBuilder = formSubmitterBuilder;
     this.credentialsProvider = credentialsProvider;
   }
 
@@ -45,8 +45,12 @@ class SUCOVIDScheduleHandler {
       const validCronExpression = cron.validate(cronExpression);
       if (validCronExpression) {
         cron.schedule(cronExpression, async () => {
+          const formSubmitter = this.formSubmitterBuilder
+            .withReceipt(receiptPath)
+            .build();
+
           try {
-            await this.formSubmitter.submitForm(
+            await formSubmitter.submitForm(
               credentials.username,
               credentials.password,
               receiptPath
