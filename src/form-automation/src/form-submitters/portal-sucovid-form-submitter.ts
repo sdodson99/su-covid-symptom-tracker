@@ -61,7 +61,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     }
   }
 
-  async createPatientPortalPage(browser: Browser): Promise<Page> {
+  private async createPatientPortalPage(browser: Browser): Promise<Page> {
     const page = await browser.newPage();
 
     await page.goto(Constants.PATIENT_PORTAL_URL);
@@ -69,7 +69,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     return page;
   }
 
-  async inputUsername(page: Page, username: string): Promise<void> {
+  private async inputUsername(page: Page, username: string): Promise<void> {
     const usernameInput = await page.$(Constants.USERNAME_INPUT_SELECTOR);
 
     if (!usernameInput) {
@@ -79,7 +79,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     await usernameInput.type(username);
   }
 
-  async inputPassword(page: Page, password: string): Promise<void> {
+  private async inputPassword(page: Page, password: string): Promise<void> {
     const passwordInput = await page.$(Constants.PASSWORD_INPUT_SELECTOR);
 
     if (!passwordInput) {
@@ -89,7 +89,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     await passwordInput.type(password);
   }
 
-  async executeLogin(page: Page): Promise<void> {
+  private async executeLogin(page: Page): Promise<void> {
     const loginButton = await page.$(Constants.LOGIN_BUTTON_SELECTOR);
 
     if (!loginButton) {
@@ -104,7 +104,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     }
   }
 
-  async goToCoronavirusForm(page: Page): Promise<void> {
+  private async goToCoronavirusForm(page: Page): Promise<void> {
     const covidNavLink = await page.$(Constants.COVID_NAV_LINK_SELECTOR);
 
     if (!covidNavLink) {
@@ -122,7 +122,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     await Promise.all([formStartLink.click(), this.waitForNavigationWithTimeout(page)]);
   }
 
-  async inputNotOnCampus(page: Page): Promise<void> {
+  private async inputNotOnCampus(page: Page): Promise<void> {
     const notOnCampusInput = await page.$(Constants.NOT_ON_CAMPUS_INPUT_SELECTOR);
 
     if (!notOnCampusInput) {
@@ -132,7 +132,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     await notOnCampusInput.click();
   }
 
-  async inputNoCoronavirusContact(page: Page): Promise<void> {
+  private async inputNoCoronavirusContact(page: Page): Promise<void> {
     const coronavirusContactQuestion = await page.$(Constants.COVID_CONTACT_QUESTION_SELECTOR);
 
     if (!coronavirusContactQuestion) {
@@ -155,7 +155,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     await noCoronavirusContactInput.selectOption(Constants.NO_COVID_CONTACT_INPUT_SELECTOR);
   }
 
-  async inputNoCoronavirusSymptoms(page: Page): Promise<void> {
+  private async inputNoCoronavirusSymptoms(page: Page): Promise<void> {
     const coronavirusSymptomsQuestion = await page.$(Constants.COVID_SYMPTOMS_QUESTION_SELECTOR);
 
     if (!coronavirusSymptomsQuestion) {
@@ -177,7 +177,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     await noCoronavirusSymptomsInput.selectOption(Constants.NO_COVID_SYMPTOMS_INPUT_SELECTOR);
   }
 
-  async waitForNavigationWithTimeout(page: Page): Promise<Response | null> {
+  private async waitForNavigationWithTimeout(page: Page): Promise<Response | null> {
     const timeoutMinutes = 5;
     const timeoutMilliseconds = timeoutMinutes * 60 * 1000;
 
