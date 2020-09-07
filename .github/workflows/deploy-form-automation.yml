@@ -30,6 +30,10 @@ jobs:
         run: 'npm run build'
         working-directory: ${{ env.FORM_AUTOMATION_PATH }}
 
+      - name: 'Test Form Automation'
+        run: 'npm run test'
+        working-directory: ${{ env.FORM_AUTOMATION_PATH }}
+
       - name: 'Publish Form Automation'
         run: 'npm publish'
         working-directory: ${{ env.FORM_AUTOMATION_PATH }}
