@@ -1,5 +1,5 @@
 import { AzureFunction, Context } from '@azure/functions';
-import { PortalSUCOVIDFormSubmitter } from 'su-covid-daily';
+import { SUCOVIDFormSubmitterBuilder } from 'su-covid-daily';
 import moment from 'moment';
 import os from 'os';
 import path from 'path';
@@ -10,17 +10,19 @@ const timerTrigger: AzureFunction = async function (
 ): Promise<void> {
   context.log('Starting daily form submission...', new Date().toISOString());
 
-  const contextLogger = new ContextLogger(context);
   const skipSubmission = process.env.SU_SKIPSUBMISSION == 'true';
-  const formSubmitter = new PortalSUCOVIDFormSubmitter(
-    contextLogger,
-    skipSubmission
-  );
-
   const username = process.env.SU_USERNAME;
   const password = process.env.SU_PASSWORD;
   const timeStamp = moment().format();
   const receiptPath = path.join(os.homedir(), `receipt-${timeStamp}.png`);
+
+  const contextLogger = new ContextLogger(context);
+  const formSubmitterBuilder = new SUCOVIDFormSubmitterBuilder();
+  const formSubmitter = formSubmitterBuilder
+    .withLogger(contextLogger)
+    .withReceipt(receiptPath)
+    .withoutSubmission(skipSubmission)
+    .build();
 
   await formSubmitter.submitForm(username, password, receiptPath);
 
