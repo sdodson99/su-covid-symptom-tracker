@@ -36,10 +36,9 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     this.logger.log('Opening patient portal...');
 
     const browser = await this.browserFactory.createBrowser();
+    const page = await this.createPatientPortalPage(browser);
 
     try {
-      const page = await this.createPatientPortalPage(browser);
-
       this.logger.log('Logging in...');
       await this.inputUsername(page, username);
       await this.inputPassword(page, password);

@@ -12,6 +12,5 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true
-  },
-  "exclude": ["**/*.test.ts", "dist", "node_modules"]
+  }
 }
