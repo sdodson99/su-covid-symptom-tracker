@@ -126,7 +126,7 @@ class PlaywrightSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       this.waitForNavigationWithTimeout(page),
     ]);
 
-    const formStartLinkSelector = '#ctl00_ContentPlaceHolder1_lblStatusForm a';
+    const formStartLinkSelector = '#ctl00_ContentPlaceHolder1_divForms a';
     const formStartLink = await page.$(formStartLinkSelector);
 
     if (!formStartLink) {
@@ -151,25 +151,9 @@ class PlaywrightSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   }
 
   async inputNoCoronavirusContact(page: Page): Promise<void> {
-    const coronavirusContactQuestionSelector =
-      'xpath=//span[contains(text(), "1.")]';
-    const coronavirusContactQuestion = await page.$(
-      coronavirusContactQuestionSelector
-    );
-
-    if (!coronavirusContactQuestion) {
-      throw new Error('No coronavirus contact question not found.');
-    }
-
-    const coronavirusContactQuestionParent = await coronavirusContactQuestion.$(
-      '..'
-    );
-    if (!coronavirusContactQuestionParent) {
-      throw new Error('No coronavirus contact question parent not found.');
-    }
-
-    const noCoronavirusContactInputSelector = 'select';
-    const noCoronavirusContactInput = await coronavirusContactQuestionParent.$(
+    const noCoronavirusContactInputSelector =
+      '#ctl00_ContentPlaceHolder1_RadioGroup44789_1';
+    const noCoronavirusContactInput = await page.$(
       noCoronavirusContactInputSelector
     );
 
@@ -177,30 +161,13 @@ class PlaywrightSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       throw new Error('No coronavirus contact input not found.');
     }
 
-    const noOptionValue = '23894';
-    await noCoronavirusContactInput.selectOption(noOptionValue);
+    await noCoronavirusContactInput.click();
   }
 
   async inputNoCoronavirusSymptoms(page: Page): Promise<void> {
-    const coronavirusSymptomsQuestionSelector =
-      'xpath=//span[contains(text(), "2.")]';
-    const coronavirusSymptomsQuestion = await page.$(
-      coronavirusSymptomsQuestionSelector
-    );
-
-    if (!coronavirusSymptomsQuestion) {
-      throw new Error('No coronavirus symptoms question not found.');
-    }
-
-    const coronavirusSymptomsQuestionParent = await coronavirusSymptomsQuestion.$(
-      '..'
-    );
-    if (!coronavirusSymptomsQuestionParent) {
-      throw new Error('No coronavirus symptoms question parent not found.');
-    }
-
-    const noCoronavirusSymptomsInputSelector = 'select';
-    const noCoronavirusSymptomsInput = await coronavirusSymptomsQuestionParent.$(
+    const noCoronavirusSymptomsInputSelector =
+      '#ctl00_ContentPlaceHolder1_RadioGroup45054_1';
+    const noCoronavirusSymptomsInput = await page.$(
       noCoronavirusSymptomsInputSelector
     );
 
@@ -208,8 +175,7 @@ class PlaywrightSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       throw new Error('No coronavirus symptoms input not found.');
     }
 
-    const noOptionValue = '23896';
-    await noCoronavirusSymptomsInput.selectOption(noOptionValue);
+    await noCoronavirusSymptomsInput.click();
   }
 
   async executeSubmit(page: Page): Promise<void> {
