@@ -113,39 +113,10 @@ test('submit form, with not on campus input not found, throws exception', async 
   );
 });
 
-test('submit form, with COVID contact question not found, throws exception', async () => {
+test('submit form, with no COVID contact question input not found, throws exception', async () => {
   page.$.calledWith(
-    new Matcher<string>((value) => value !== Constants.COVID_CONTACT_QUESTION_SELECTOR)
+    new Matcher<string>((value) => value !== Constants.NO_COVID_CONTACT_INPUT_SELECTOR)
   ).mockResolvedValue(defaultPageElement);
-  mockSuccessfulLogin();
-
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow(
-    'No coronavirus contact question not found.'
-  );
-});
-
-test('submit form, with COVID contact question parent not found, throws exception', async () => {
-  page.$.calledWith(
-    new Matcher<string>((value) => value !== Constants.COVID_CONTACT_QUESTION_SELECTOR)
-  ).mockResolvedValue(defaultPageElement);
-  const contactQuestionElement = mock<ElementHandle<SVGElement | HTMLElement>>();
-  page.$.calledWith(Constants.COVID_CONTACT_QUESTION_SELECTOR).mockResolvedValue(contactQuestionElement);
-  contactQuestionElement.$.calledWith('..').mockResolvedValueOnce(null);
-  mockSuccessfulLogin();
-
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow(
-    'No coronavirus contact question parent not found.'
-  );
-});
-
-test('submit form, with COVID contact question input not found, throws exception', async () => {
-  page.$.calledWith(
-    new Matcher<string>((value) => value !== Constants.COVID_CONTACT_QUESTION_SELECTOR)
-  ).mockResolvedValue(defaultPageElement);
-  const contactQuestionElement = mock<ElementHandle<SVGElement | HTMLElement>>();
-  page.$.calledWith(Constants.COVID_CONTACT_QUESTION_SELECTOR).mockResolvedValue(contactQuestionElement);
-  contactQuestionElement.$.calledWith('..').mockResolvedValueOnce(contactQuestionElement);
-  contactQuestionElement.$.calledWith('select').mockResolvedValueOnce(null);
   mockSuccessfulLogin();
 
   await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow(
@@ -153,39 +124,10 @@ test('submit form, with COVID contact question input not found, throws exception
   );
 });
 
-test('submit form, with COVID symptoms question not found, throws exception', async () => {
+test('submit form, with no COVID symptoms question input not found, throws exception', async () => {
   page.$.calledWith(
-    new Matcher<string>((value) => value !== Constants.COVID_SYMPTOMS_QUESTION_SELECTOR)
+    new Matcher<string>((value) => value !== Constants.NO_COVID_SYMPTOMS_INPUT_SELECTOR)
   ).mockResolvedValue(defaultPageElement);
-  mockSuccessfulLogin();
-
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow(
-    'No coronavirus symptoms question not found.'
-  );
-});
-
-test('submit form, with COVID symptoms question parent not found, throws exception', async () => {
-  page.$.calledWith(
-    new Matcher<string>((value) => value !== Constants.COVID_SYMPTOMS_QUESTION_SELECTOR)
-  ).mockResolvedValue(defaultPageElement);
-  const symptomsQuestionElement = mock<ElementHandle<SVGElement | HTMLElement>>();
-  page.$.calledWith(Constants.COVID_SYMPTOMS_QUESTION_SELECTOR).mockResolvedValue(symptomsQuestionElement);
-  symptomsQuestionElement.$.calledWith('..').mockResolvedValueOnce(null);
-  mockSuccessfulLogin();
-
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow(
-    'No coronavirus symptoms question parent not found.'
-  );
-});
-
-test('submit form, with COVID symptoms question input not found, throws exception', async () => {
-  page.$.calledWith(
-    new Matcher<string>((value) => value !== Constants.COVID_SYMPTOMS_QUESTION_SELECTOR)
-  ).mockResolvedValue(defaultPageElement);
-  const symptomsQuestionElement = mock<ElementHandle<SVGElement | HTMLElement>>();
-  page.$.calledWith(Constants.COVID_SYMPTOMS_QUESTION_SELECTOR).mockResolvedValue(symptomsQuestionElement);
-  symptomsQuestionElement.$.calledWith('..').mockResolvedValueOnce(symptomsQuestionElement);
-  symptomsQuestionElement.$.calledWith('select').mockResolvedValueOnce(null);
   mockSuccessfulLogin();
 
   await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow(
