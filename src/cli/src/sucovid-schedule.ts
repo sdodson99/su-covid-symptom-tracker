@@ -19,11 +19,12 @@ program
     '-h, --hour <number>',
     'hour of the day to execute the submission (0-23)'
   )
-  .option('-s, --no-submit', 'skip form submission');
+  .option('-s, --no-submit', 'skip form submission')
+  .option('-r, --no-receipt', 'skip receipt output');
 
 program.parse();
 
-const { hour, username, password, output, submit } = program;
+const { hour, username, password, output, submit, receipt } = program;
 
 let skipSubmission = !submit;
 if (process.env.NODE_ENV === 'development') {
@@ -39,5 +40,6 @@ scheduleHandler.handleSchedule(
   username,
   password,
   output,
-  skipSubmission
+  skipSubmission,
+  !receipt
 );

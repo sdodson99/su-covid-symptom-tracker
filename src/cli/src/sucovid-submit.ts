@@ -15,11 +15,12 @@ program
     'output directory for submission receipt',
     process.cwd()
   )
-  .option('-s, --no-submit', 'skip form submission');
+  .option('-s, --no-submit', 'skip form submission')
+  .option('-r, --no-receipt', 'skip receipt output');
 
 program.parse();
 
-const { username, password, output, submit } = program;
+const { username, password, output, submit, receipt } = program;
 
 let skipSubmission = !submit;
 if (process.env.NODE_ENV === 'development') {
@@ -30,4 +31,10 @@ const submitHandler = container.get<SUCOVIDSubmitHandler>(
   ContainerType.SUCOVIDSubmitHandler
 );
 
-submitHandler.handleSubmit(username, password, output, skipSubmission);
+submitHandler.handleSubmit(
+  username,
+  password,
+  output,
+  skipSubmission,
+  !receipt
+);
