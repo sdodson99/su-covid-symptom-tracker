@@ -1,5 +1,5 @@
 import { AzureFunction, Context } from '@azure/functions';
-import { SUCOVIDFormSubmitterBuilder } from 'su-covid-daily';
+import { CampusStatus, SUCOVIDFormSubmitterBuilder } from 'su-covid-daily';
 import moment from 'moment';
 import os from 'os';
 import path from 'path';
@@ -13,6 +13,7 @@ const timerTrigger: AzureFunction = async function (
   const skipSubmission = process.env.SU_SKIPSUBMISSION == 'true';
   const username = process.env.SU_USERNAME;
   const password = process.env.SU_PASSWORD;
+  const campusStatus = CampusStatus.NOT_ON_CAMPUS;
   const timeStamp = moment().format();
   const receiptPath = path.join(os.homedir(), `receipt-${timeStamp}.png`);
 
@@ -24,7 +25,7 @@ const timerTrigger: AzureFunction = async function (
     .withoutSubmission(skipSubmission)
     .build();
 
-  await formSubmitter.submitForm(username, password, receiptPath);
+  await formSubmitter.submitForm(username, password, campusStatus);
 
   context.log('Finished daily form submission.', new Date().toISOString());
 };
