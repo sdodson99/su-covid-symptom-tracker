@@ -25,7 +25,7 @@ class SUCOVIDFormSubmitterBuilder {
     return this;
   }
 
-  withoutSubmission(skipSubmission: boolean): SUCOVIDFormSubmitterBuilder {
+  withoutSubmission(skipSubmission = true): SUCOVIDFormSubmitterBuilder {
     this.skipSubmission = skipSubmission;
     return this;
   }

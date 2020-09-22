@@ -28,7 +28,8 @@ class SUCOVIDScheduleHandler {
     username: string,
     password: string,
     outputDirectory: string,
-    skipSubmission = false
+    skipSubmission = false,
+    skipReceipt = false
   ) {
     const receiptPath = createReceiptPath(outputDirectory);
     const credentials = await promptCredentialsIfNotProvided(
@@ -46,8 +47,11 @@ class SUCOVIDScheduleHandler {
       const validCronExpression = cron.validate(cronExpression);
       if (validCronExpression) {
         cron.schedule(cronExpression, async () => {
+          if (!skipReceipt) {
+            this.formSubmitterBuilder.withReceipt(receiptPath);
+          }
+
           const formSubmitter = this.formSubmitterBuilder
-            .withReceipt(receiptPath)
             .withoutSubmission(skipSubmission)
             .build();
 
