@@ -7,17 +7,20 @@ import SUCOVIDFormSubmissionExecutor from '../form-submission-executors/sucovid-
 import DefaultSUCOVIDFormSubmissionExecutor from '../form-submission-executors/default-sucovid-form-submission-executor';
 import SkippingSUCOVIDFormSubmissionExecutor from '../form-submission-executors/skipping-sucovid-form-submission-executor';
 import ReceiptSUCOVIDFormSubmissionExecutor from '../form-submission-executors/receipt-sucovid-form-submission-executor';
+import CampusStatusInputter from '../campus-status-inputters/campus-status-inputter';
 
 class SUCOVIDFormSubmitterBuilder {
   private browserFactory: BrowserFactory;
-  private logger: Logger;
+  private campusStatusInputter: CampusStatusInputter;
   private skipSubmission: boolean;
   private receiptPath?: string;
+  private logger: Logger;
 
   constructor(browserFactory?: PlaywrightChromiumBrowserFactory) {
     this.browserFactory = browserFactory || new PlaywrightChromiumBrowserFactory();
-    this.logger = console;
+    this.campusStatusInputter = new CampusStatusInputter();
     this.skipSubmission = false;
+    this.logger = console;
   }
 
   withLogger(logger: Logger): SUCOVIDFormSubmitterBuilder {
@@ -38,7 +41,12 @@ class SUCOVIDFormSubmitterBuilder {
   build(): SUCOVIDFormSubmitter {
     const submissionExecutor = this.buildSubmissionExecutor();
 
-    return new PortalSUCOVIDFormSubmitter(this.browserFactory, submissionExecutor, this.logger);
+    return new PortalSUCOVIDFormSubmitter(
+      this.browserFactory,
+      submissionExecutor,
+      this.campusStatusInputter,
+      this.logger
+    );
   }
 
   buildSubmissionExecutor(): SUCOVIDFormSubmissionExecutor {

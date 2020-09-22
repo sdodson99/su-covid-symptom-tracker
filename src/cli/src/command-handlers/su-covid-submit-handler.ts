@@ -3,6 +3,7 @@ import ContainerType from '../containers/container-type';
 import { SUCOVIDFormSubmitterBuilder } from 'su-covid-daily';
 import createReceiptPath from '../receipts/receipt-path-creator';
 import promptCredentialsIfNotProvided from '../prompts/credentials-prompt';
+import promptCampusStatus from '../prompts/campus-status-prompt';
 import CredentialsProvider from '../credentials/credentials-provider';
 
 @injectable()
@@ -33,6 +34,7 @@ class SUCOVIDSubmitHandler {
       password,
       this.credentialsProvider
     );
+    const campusStatus = await promptCampusStatus();
 
     if (!skipReceipt) {
       this.formSubmitterBuilder.withReceipt(receiptPath);
@@ -46,7 +48,7 @@ class SUCOVIDSubmitHandler {
       await formSubmitter.submitForm(
         credentials.username,
         credentials.password,
-        receiptPath
+        campusStatus
       );
     } catch (error) {
       console.error(error.message);

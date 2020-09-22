@@ -6,6 +6,7 @@ import moment from 'moment';
 import { SUCOVIDFormSubmitterBuilder } from 'su-covid-daily';
 import createReceiptPath from '../receipts/receipt-path-creator';
 import promptCredentialsIfNotProvided from '../prompts/credentials-prompt';
+import promptCampusStatus from '../prompts/campus-status-prompt';
 import CredentialsProvider from '../credentials/credentials-provider';
 
 @injectable()
@@ -37,6 +38,7 @@ class SUCOVIDScheduleHandler {
       password,
       this.credentialsProvider
     );
+    const campusStatus = await promptCampusStatus();
     const hour = await this.promptHourIfNotProvided(hourInput);
 
     const isValidHour = !Number.isNaN(hour) && hour >= 0 && hour <= 23;
@@ -59,7 +61,7 @@ class SUCOVIDScheduleHandler {
             await formSubmitter.submitForm(
               credentials.username,
               credentials.password,
-              receiptPath
+              campusStatus
             );
           } catch (error) {
             console.error(error.message);
