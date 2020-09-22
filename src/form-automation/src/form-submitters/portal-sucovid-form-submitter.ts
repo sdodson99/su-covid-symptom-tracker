@@ -3,6 +3,8 @@ import SUCOVIDFormSubmitter from './sucovid-form-submitter';
 import Logger from '../loggers/logger';
 import BrowserFactory from '../browsers/browser-factory';
 import SUCOVIDFormSubmissionExecutor from '../form-submission-executors/sucovid-form-submission-executor';
+import CampusStatus from '../campus-status-inputters/campus-status';
+import CampusStatusInputter from '../campus-status-inputters/campus-status-inputter';
 
 const Constants = {
   PATIENT_PORTAL_URL: 'https://stevenson.medicatconnect.com/',
@@ -11,7 +13,6 @@ const Constants = {
   LOGIN_BUTTON_SELECTOR: '#ctl00_loginBar_lbtnLogin',
   COVID_NAV_LINK_SELECTOR: '#ctl00_navBar_liStatus a',
   COVID_FORM_START_SELECTOR: '#ctl00_ContentPlaceHolder1_divForms a',
-  NOT_ON_CAMPUS_INPUT_SELECTOR: '#ctl00_ContentPlaceHolder1_44954No',
   NO_COVID_CONTACT_INPUT_SELECTOR: '#ctl00_ContentPlaceHolder1_RadioGroup44789_1',
   NO_COVID_SYMPTOMS_INPUT_SELECTOR: '#ctl00_ContentPlaceHolder1_RadioGroup45054_1',
   SUBMIT_BUTTON_SELECTOR: '#ctl00_ContentPlaceHolder1_lbtnSubmit',
@@ -20,15 +21,22 @@ const Constants = {
 class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   private browserFactory: BrowserFactory;
   private submissionExecutor: SUCOVIDFormSubmissionExecutor;
+  private campusStatusInputter: CampusStatusInputter;
   private logger: Logger;
 
-  constructor(browserFactory: BrowserFactory, submissionExecutor: SUCOVIDFormSubmissionExecutor, logger: Logger) {
+  constructor(
+    browserFactory: BrowserFactory,
+    submissionExecutor: SUCOVIDFormSubmissionExecutor,
+    campusStatusInputter: CampusStatusInputter,
+    logger: Logger
+  ) {
     this.browserFactory = browserFactory;
     this.submissionExecutor = submissionExecutor;
+    this.campusStatusInputter = campusStatusInputter;
     this.logger = logger;
   }
 
-  async submitForm(username: string, password: string): Promise<void> {
+  async submitForm(username: string, password: string, campusStatus: CampusStatus): Promise<void> {
     this.logger.log('Running automated COVID student symptom tracker form submission.');
 
     this.logger.log('Opening patient portal...');
@@ -47,7 +55,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
       await this.goToCoronavirusForm(page);
 
       this.logger.log('Filling out form...');
-      await this.inputNotOnCampus(page);
+      await this.campusStatusInputter.inputCampusStatus(campusStatus, page);
       await this.inputNoCoronavirusContact(page);
       await this.inputNoCoronavirusSymptoms(page);
 
@@ -118,16 +126,6 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
     }
 
     await Promise.all([formStartLink.click(), this.waitForNavigationWithTimeout(page)]);
-  }
-
-  private async inputNotOnCampus(page: Page): Promise<void> {
-    const notOnCampusInput = await page.$(Constants.NOT_ON_CAMPUS_INPUT_SELECTOR);
-
-    if (!notOnCampusInput) {
-      throw new Error('Not on campus input not found.');
-    }
-
-    await notOnCampusInput.click();
   }
 
   private async inputNoCoronavirusContact(page: Page): Promise<void> {

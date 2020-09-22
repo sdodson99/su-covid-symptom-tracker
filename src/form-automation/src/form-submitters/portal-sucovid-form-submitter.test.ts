@@ -4,6 +4,8 @@ import SUCOVIDFormSubmissionExecutor from '../form-submission-executors/sucovid-
 import BrowserFactory from '../browsers/browser-factory';
 import Logger from '../loggers/logger';
 import { Browser, Page, ElementHandle } from 'playwright-chromium';
+import CampusStatus from '../campus-status-inputters/campus-status';
+import CampusStatusInputter, { CampusStatusInputSelector } from '../campus-status-inputters/campus-status-inputter';
 
 let formSubmitter: PortalSUCOVIDFormSubmitter;
 let browserFactory: MockProxy<BrowserFactory>;
@@ -25,13 +27,18 @@ beforeEach(() => {
   browser.newPage.mockResolvedValue(page);
   defaultPageElement.$.mockResolvedValue(defaultPageElement);
 
-  formSubmitter = new PortalSUCOVIDFormSubmitter(browserFactory, submissionExecutor, logger);
+  formSubmitter = new PortalSUCOVIDFormSubmitter(
+    browserFactory,
+    submissionExecutor,
+    new CampusStatusInputter(),
+    logger
+  );
 });
 
 test('submit form, executes submission', async () => {
   mockSuccessfulSubmission();
 
-  await formSubmitter.submitForm('username', 'password');
+  await formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER);
 
   expect(submissionExecutor.executeSubmit).toBeCalled();
 });
@@ -39,13 +46,13 @@ test('submit form, executes submission', async () => {
 test('submit form, closes browser', async () => {
   mockSuccessfulSubmission();
 
-  await formSubmitter.submitForm('username', 'password');
+  await formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER);
 
   expect(browser.close).toBeCalled();
 });
 
 test('submit form, with exception, closes browser', async () => {
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow();
+  await expect(() => formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER)).rejects.toThrow();
   expect(browser.close).toBeCalled();
 });
 
@@ -54,7 +61,9 @@ test('submit form, with username input not found, throws exception', async () =>
     defaultPageElement
   );
 
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow('Username input not found.');
+  await expect(() => formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER)).rejects.toThrow(
+    'Username input not found.'
+  );
 });
 
 test('submit form, with password input not found, throws exception', async () => {
@@ -62,7 +71,9 @@ test('submit form, with password input not found, throws exception', async () =>
     defaultPageElement
   );
 
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow('Password input not found.');
+  await expect(() => formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER)).rejects.toThrow(
+    'Password input not found.'
+  );
 });
 
 test('submit form, with login button not found, throws exception', async () => {
@@ -70,14 +81,18 @@ test('submit form, with login button not found, throws exception', async () => {
     defaultPageElement
   );
 
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow('Login button not found.');
+  await expect(() => formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER)).rejects.toThrow(
+    'Login button not found.'
+  );
 });
 
 test('submit form, with login failure, throws exception', async () => {
   page.$.mockResolvedValue(defaultPageElement);
   page.url.mockReturnValueOnce('login');
 
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow('Login failed.');
+  await expect(() => formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER)).rejects.toThrow(
+    'Login failed.'
+  );
 });
 
 test('submit form, with COVID navigation link not found, throws exception', async () => {
@@ -86,7 +101,7 @@ test('submit form, with COVID navigation link not found, throws exception', asyn
   );
   mockSuccessfulLogin();
 
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow(
+  await expect(() => formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER)).rejects.toThrow(
     'Coronavirus navigation link not found.'
   );
 });
@@ -97,19 +112,19 @@ test('submit form, with COVID form start link not found, throws exception', asyn
   );
   mockSuccessfulLogin();
 
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow(
+  await expect(() => formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER)).rejects.toThrow(
     'Coronavirus form start link not found.'
   );
 });
 
 test('submit form, with not on campus input not found, throws exception', async () => {
-  page.$.calledWith(new Matcher<string>((value) => value !== Constants.NOT_ON_CAMPUS_INPUT_SELECTOR)).mockResolvedValue(
+  page.$.calledWith(new Matcher<string>((value) => value !== CampusStatusInputSelector.NO_ANSWER)).mockResolvedValue(
     defaultPageElement
   );
   mockSuccessfulLogin();
 
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow(
-    'Not on campus input not found.'
+  await expect(() => formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER)).rejects.toThrow(
+    'Campus status input not found for NO_ANSWER.'
   );
 });
 
@@ -119,7 +134,7 @@ test('submit form, with no COVID contact question input not found, throws except
   ).mockResolvedValue(defaultPageElement);
   mockSuccessfulLogin();
 
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow(
+  await expect(() => formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER)).rejects.toThrow(
     'No coronavirus contact input not found.'
   );
 });
@@ -130,7 +145,7 @@ test('submit form, with no COVID symptoms question input not found, throws excep
   ).mockResolvedValue(defaultPageElement);
   mockSuccessfulLogin();
 
-  await expect(() => formSubmitter.submitForm('username', 'password')).rejects.toThrow(
+  await expect(() => formSubmitter.submitForm('username', 'password', CampusStatus.NO_ANSWER)).rejects.toThrow(
     'No coronavirus symptoms input not found.'
   );
 });
