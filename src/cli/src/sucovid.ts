@@ -3,7 +3,7 @@
 import { Command } from 'commander';
 import UpdateNotifier from 'update-notifier';
 
-const version = '1.1.0';
+const version = '1.2.0';
 
 (async () => {
   const notifier = UpdateNotifier({

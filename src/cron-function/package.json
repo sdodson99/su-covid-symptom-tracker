@@ -1,6 +1,6 @@
 {
   "name": "su-covid-daily-cron",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "scripts": {
     "fix": "npm run fix:eslint && npm run fix:prettier",
     "fix:eslint": "eslint --fix .",
@@ -36,6 +36,6 @@
   },
   "dependencies": {
     "moment": "^2.27.0",
-    "su-covid-daily": "^1.1.0"
+    "su-covid-daily": "^1.2.0"
   }
 }
