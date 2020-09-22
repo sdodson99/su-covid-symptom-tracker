@@ -8,20 +8,33 @@ import SUCOVIDSubmitHandler from './command-handlers/su-covid-submit-handler';
 const program = new Command();
 
 program
-  .option('-u, --username <username>', 'username for Stevenson Univeristy')
-  .option('-p, --password <password>', 'password for Stevenson Univeristy')
+  .option('-u, --username <username>', 'username for Stevenson University')
+  .option('-p, --password <password>', 'password for Stevenson University')
   .option(
     '-o, --output <directory>',
     'output directory for submission receipt',
     process.cwd()
-  );
+  )
+  .option('-s, --no-submit', 'skip form submission')
+  .option('-r, --no-receipt', 'skip receipt output');
 
 program.parse();
 
-const { username, password, output } = program;
+const { username, password, output, submit, receipt } = program;
+
+let skipSubmission = !submit;
+if (process.env.NODE_ENV === 'development') {
+  skipSubmission = true;
+}
 
 const submitHandler = container.get<SUCOVIDSubmitHandler>(
   ContainerType.SUCOVIDSubmitHandler
 );
 
-submitHandler.handleSubmit(username, password, output);
+submitHandler.handleSubmit(
+  username,
+  password,
+  output,
+  skipSubmission,
+  !receipt
+);

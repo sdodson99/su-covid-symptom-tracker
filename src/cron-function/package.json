@@ -12,15 +12,11 @@
     "build": "tsc",
     "build:production": "npm run prestart && npm prune --production",
     "watch": "tsc --w",
+    "storage": "azurite -l storage",
     "prestart": "npm run build && func extensions install",
     "start:host": "func start",
     "start": "npm-run-all --parallel start:host watch",
     "test": "echo \"No tests yet...\""
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run fix"
-    }
   },
   "description": "",
   "devDependencies": {
@@ -35,7 +31,6 @@
     "eslint-plugin-import": "^2.20.2",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
-    "husky": "^4.2.5",
     "prettier": "^2.1.1",
     "typescript": "^3.3.3"
   },
