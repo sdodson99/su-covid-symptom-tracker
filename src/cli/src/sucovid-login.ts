@@ -8,8 +8,8 @@ import SUCOVIDLoginHandler from './command-handlers/su-covid-login-handler';
 const program = new Command();
 
 program
-  .option('-u, --username <username>', 'Username for Stevenson Univeristy')
-  .option('-p, --password <password>', 'Password for Stevenson Univeristy');
+  .option('-u, --username <username>', 'Username for Stevenson University')
+  .option('-p, --password <password>', 'Password for Stevenson University');
 
 program.parse();
 

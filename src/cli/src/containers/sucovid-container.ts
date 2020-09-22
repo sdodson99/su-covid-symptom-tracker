@@ -31,10 +31,9 @@ container
   .bind<SUCOVIDScheduleHandler>(ContainerType.SUCOVIDScheduleHandler)
   .to(SUCOVIDScheduleHandler);
 
-const skipSubmission = process.env.NODE_ENV === 'development';
-const formSubmitterBuilder = new SUCOVIDFormSubmitterBuilder()
-  .withLogger(console)
-  .withoutSubmission(skipSubmission);
+const formSubmitterBuilder = new SUCOVIDFormSubmitterBuilder().withLogger(
+  console
+);
 
 container
   .bind<SUCOVIDFormSubmitterBuilder>(ContainerType.SUCOVIDFormSubmitterBuilder)

@@ -8,8 +8,8 @@ import SUCOVIDScheduleHandler from './command-handlers/su-covid-schedule-handler
 const program = new Command();
 
 program
-  .option('-u, --username <username>', 'username for Stevenson Univeristy')
-  .option('-p, --password <password>', 'password for Stevenson Univeristy')
+  .option('-u, --username <username>', 'username for Stevenson University')
+  .option('-p, --password <password>', 'password for Stevenson University')
   .option(
     '-o, --output <directory>',
     'output directory for submission receipt',
@@ -18,14 +18,26 @@ program
   .option(
     '-h, --hour <number>',
     'hour of the day to execute the submission (0-23)'
-  );
+  )
+  .option('-s, --no-submit', 'skip form submission');
 
 program.parse();
 
-const { hour, username, password, output } = program;
+const { hour, username, password, output, submit } = program;
+
+let skipSubmission = !submit;
+if (process.env.NODE_ENV === 'development') {
+  skipSubmission = true;
+}
 
 const scheduleHandler = container.get<SUCOVIDScheduleHandler>(
   ContainerType.SUCOVIDScheduleHandler
 );
 
-scheduleHandler.handleSchedule(hour, username, password, output);
+scheduleHandler.handleSchedule(
+  hour,
+  username,
+  password,
+  output,
+  skipSubmission
+);

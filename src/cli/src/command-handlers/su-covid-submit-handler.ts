@@ -23,7 +23,8 @@ class SUCOVIDSubmitHandler {
   async handleSubmit(
     username: string,
     password: string,
-    outputDirectory: string
+    outputDirectory: string,
+    skipSubmission = false
   ) {
     const receiptPath = createReceiptPath(outputDirectory);
     const credentials = await promptCredentialsIfNotProvided(
@@ -33,6 +34,7 @@ class SUCOVIDSubmitHandler {
     );
     const formSubmitter = this.formSubmitterBuilder
       .withReceipt(receiptPath)
+      .withoutSubmission(skipSubmission)
       .build();
 
     try {
