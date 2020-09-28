@@ -13,7 +13,7 @@ class DefaultSUCOVIDFormSubmissionExecutor implements SUCOVIDFormSubmissionExecu
   constructor(logger: Logger) {
     this.logger = logger;
 
-    const timeoutMinutes = 5;
+    const timeoutMinutes = 10;
     const timeoutMilliseconds = timeoutMinutes * 60 * 1000;
     this.submitTimeoutMilliseconds = timeoutMilliseconds;
   }

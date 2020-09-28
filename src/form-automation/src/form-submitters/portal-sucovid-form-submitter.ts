@@ -149,7 +149,7 @@ class PortalSUCOVIDFormSubmitter implements SUCOVIDFormSubmitter {
   }
 
   private async waitForNavigationWithTimeout(page: Page): Promise<Response | null> {
-    const timeoutMinutes = 5;
+    const timeoutMinutes = 10;
     const timeoutMilliseconds = timeoutMinutes * 60 * 1000;
 
     return page.waitForNavigation({ timeout: timeoutMilliseconds });
